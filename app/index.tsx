@@ -1,10 +1,11 @@
 // ============================================================
-// app/index.tsx — Home Screen (Dashboard)
+// app/index.tsx — Home Screen (Dashboard) - Refactored
 // Layout (top → bottom):
-//   1. Yellow block: ATHLETE DIARY + gear icon + streak + TRAIN.LOG.GROW. + date
-//   2. White block: THIS YEAR + mood grid
-//   3. Red block: RECENT SESSIONS + white session cards
-//   4. White bar: + LOG SESSION black button
+//   1. Yellow card: ATHLETE DIARY + calendar/gear + streak + TRAIN.LOG.GROW. + refined date
+//   2. White card: THIS YEAR + MoodGrid
+//   3. Recent sessions heading + SessionCard white cards
+//   4. Bottom integrated bar: LOG SESSION black button bar at the extreme bottom
+// Refactored for card-based structure, normalized margins, and full-screen ground (light grey ground).
 // ============================================================
 
 import { Ionicons } from '@expo/vector-icons';
@@ -22,7 +23,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withSequence,
   withSpring,
 } from 'react-native-reanimated';
 import { MoodGrid } from '../components/MoodGrid';
@@ -55,11 +55,15 @@ export default function HomeScreen() {
     transform: [{ scale: fabScale.value }],
   }));
 
+  function handleFabPressIn() {
+    fabScale.value = withSpring(0.97, { damping: 15 });
+  }
+
+  function handleFabPressOut() {
+    fabScale.value = withSpring(1.0, { damping: 12 });
+  }
+
   function handleFabPress() {
-    fabScale.value = withSequence(
-      withSpring(0.9, { damping: 10 }),
-      withSpring(1.0, { damping: 12 }),
-    );
     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.push('/log');
   }
@@ -69,7 +73,10 @@ export default function HomeScreen() {
     .sort((a, b) => b.timestamp - a.timestamp)
     .slice(0, 3);
 
-  const todayStr = format(new Date(), 'EEEE d MMMM yyyy').toUpperCase();
+  // Updated date formatting - cleaner, modern dynamic date format
+  const todayDateObj = new Date();
+  const dayMonthStr = format(todayDateObj, 'EEEE d MMMM').toUpperCase();
+  const yearStr = format(todayDateObj, 'yyyy').toUpperCase();
 
   return (
     <View style={styles.root}>
@@ -77,9 +84,12 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         bounces={true}
+        contentContainerStyle={[styles.scrollContent, {
+          paddingBottom: insets.bottom + 100, // Leaving space for FAB bottom bar
+        }]}
       >
-        {/* ── 1. YELLOW BLOCK ── */}
-        <View style={[styles.yellowBlock, { paddingTop: insets.top + SPACING.md }]}>
+        {/* ── 1. REFINED YELLOW HEADER CARD ── */}
+        <View style={[styles.yellowCard, { paddingTop: insets.top + SPACING.md }]}>
           {/* Nav row */}
           <View style={styles.navRow}>
             <Text style={styles.appName}>ATHLETE DIARY</Text>
@@ -98,18 +108,19 @@ export default function HomeScreen() {
 
           {/* Hero text */}
           <Text style={styles.heroText}>{'TRAIN.\nLOG.\nGROW.'}</Text>
-          <Text style={styles.heroSub}>{todayStr}</Text>
+          {/* Refined date display */}
+          <Text style={styles.heroSub}>{`${dayMonthStr}\n${yearStr}`}</Text>
         </View>
 
-        {/* ── 2. WHITE BLOCK — Mood Grid ── */}
-        <View style={styles.whiteBlock}>
+        {/* ── 2. REFINED WHITE CARD — Legible Detailed Heatmap ── */}
+        <View style={styles.whiteCard}>
           <Text style={styles.sectionLabel}>THIS YEAR</Text>
           <MoodGrid sessions={sessions} />
         </View>
 
-        {/* ── 3. RED BLOCK — Recent Sessions ── */}
-        <View style={styles.redBlock}>
-          <Text style={styles.recentHeading}>{'RECENT\nSESSIONS'}</Text>
+        {/* ── 3. REFINED RECENT SESSIONS SECTION heading text white cards ── */}
+        <View style={styles.recentSection}>
+          <Text style={styles.recentHeading}>RECENT{"\n"}SESSIONS</Text>
 
           {recentSessions.length === 0 ? (
             <View style={styles.emptyCard}>
@@ -120,23 +131,27 @@ export default function HomeScreen() {
               <SessionCard key={session.id} session={session} />
             ))
           )}
+          
+          {/* Schedule banner (if not configured) */}
+          <View style={styles.scheduleWrapper}>
+            {!schedule.isConfigured && <ScheduleBanner />}
+          </View>
         </View>
-
-        {/* Schedule banner (if not configured) */}
-        {!schedule.isConfigured && <ScheduleBanner />}
       </ScrollView>
 
-      {/* ── 4. BOTTOM BAR — FAB ── */}
-      <View style={[styles.fabBar, { paddingBottom: insets.bottom + SPACING.md }]}>
+      {/* ── 4. INTEGRATED BOTTOM ACTION BAR button at the extreme bottom ── */}
+      <View style={[styles.fabBarIntegrated, { paddingBottom: insets.bottom + SPACING.md }]}>
         <AnimatedPressable
-          style={[styles.fab, fabAnimStyle]}
+          style={[styles.fabIntegratedButtonBar, fabAnimStyle]}
+          onPressIn={handleFabPressIn}
+          onPressOut={handleFabPressOut}
           onPress={handleFabPress}
           accessible={true}
           accessibilityLabel="Log new session"
           accessibilityRole="button"
         >
           <Text style={styles.fabPlus}>+</Text>
-          <Text style={styles.fabText}>LOG SESSION</Text>
+          <Text style={styles.fabTextIntegratedButtonBar}>LOG SESSION</Text>
         </AnimatedPressable>
       </View>
     </View>
@@ -146,80 +161,90 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: '#E8E8E8', // Light grey background
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
 
-  // Yellow block
-  yellowBlock: {
+  // Yellow card
+  yellowCard: {
     backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.md,
-    paddingTop: SPACING.md,
-    paddingBottom: 20,
+    paddingBottom: 24,
   },
   navRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 14,
+    marginBottom: 20,
   },
   appName: {
     ...TYPOGRAPHY.appName,
   },
   gearButton: {
-    width: 30,
-    height: 30,
+    width: 32,
+    height: 32,
     backgroundColor: COLORS.black,
-    borderRadius: 15,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
   heroText: {
-    fontSize: 36,
+    fontSize: 38,
     fontWeight: '900',
     color: COLORS.textOnYellow,
     letterSpacing: -1.5,
-    lineHeight: 36,
+    lineHeight: 38,
     textTransform: 'uppercase',
   },
   heroSub: {
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: '700',
     color: COLORS.textOnYellow,
-    opacity: 0.4,
-    letterSpacing: 1,
+    opacity: 0.6,
+    letterSpacing: 2,
     textTransform: 'uppercase',
-    marginTop: 4,
+    marginTop: 6,
   },
 
-  // White block
-  whiteBlock: {
-    backgroundColor: '#FFFFFF',
+  // Refined White Card
+  whiteCard: {
+    backgroundColor: '#FFFDE7', // Off-white/faint yellow
+    borderRadius: RADIUS.lg,
     padding: SPACING.md,
+    paddingBottom: SPACING.lg,
+    marginHorizontal: SPACING.md,
+    marginTop: SPACING.sm,
   },
   sectionLabel: {
     ...TYPOGRAPHY.sectionLabel,
-    marginBottom: 10,
+    marginBottom: 12,
   },
 
-  // Red block
-  redBlock: {
-    backgroundColor: COLORS.accentRed,
-    padding: SPACING.md,
+  // Refined Recent Section
+  recentSection: {
+    flexGrow: 1,
+    paddingHorizontal: SPACING.md,
+    marginTop: SPACING.sm,
+    paddingTop: SPACING.xl,
+    paddingBottom: SPACING.lg,
   },
   recentHeading: {
     fontSize: 22,
     fontWeight: '900',
-    color: COLORS.textOnRed,
+    color: COLORS.black,
     textTransform: 'uppercase',
     letterSpacing: -1,
     lineHeight: 24,
-    marginBottom: SPACING.md,
+    marginBottom: SPACING.lg,
   },
   emptyCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: RADIUS.lg,
     padding: SPACING.md,
     alignItems: 'center',
+    marginHorizontal: SPACING.md,
   },
   emptyText: {
     fontSize: 9,
@@ -229,29 +254,43 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     textAlign: 'center',
   },
-
-  // FAB bar
-  fabBar: {
-    backgroundColor: '#FFFFFF',
-    padding: SPACING.md,
+  scheduleWrapper: {
+    marginTop: SPACING.md,
+    marginHorizontal: SPACING.md,
   },
-  fab: {
+
+  // Refined Integrated BOTTOM BAR button
+  fabBarIntegrated: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: SPACING.md,
+    paddingTop: SPACING.md,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  fabIntegratedButtonBar: {
     backgroundColor: COLORS.black,
     borderRadius: RADIUS.lg,
-    height: 50,
+    height: 56,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
   },
   fabPlus: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: '300',
     color: COLORS.primary,
-    lineHeight: 24,
+    lineHeight: 26,
   },
-  fabText: {
-    fontSize: 11,
+  fabTextIntegratedButtonBar: {
+    fontSize: 12,
     fontWeight: '800',
     color: COLORS.primary,
     letterSpacing: 2,

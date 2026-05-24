@@ -1,15 +1,13 @@
 // ============================================================
-// app/log.tsx — Log Session Modal
+// app/log.tsx — Log Session Modal - Refactored
 // Layout (top → bottom):
-//   1. Yellow block: ‹ back | TODAY | date | sport pill
-//   2. White: mood slider
-//   3. Divider
-//   4. White: performance pills
-//   5. Divider
-//   6. White: notes input
-//   7. Red block: SAVE SESSION
+//   1. Yellow card: ‹ back | TODAY Label | Dynamic Refined Date | sport pill
+//   2. White sections: Sport, Mood (slider), Performance (pills), Notes
+//   3. Red block: SAVE SESSION button, extending to the bottom edge
+// Refactored for edge-to-edge layout, safe areas, and modern aesthetics.
 // ============================================================
 
+import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
@@ -23,7 +21,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -42,6 +40,7 @@ import { MoodLevel, PerformanceLevel, SportType } from '../lib/types';
 export default function LogScreen() {
   const router = useRouter();
   const { addSession } = useSessions();
+  const insets = useSafeAreaInsets();
 
   const [mood, setMood] = useState<MoodLevel>(5);
   const [performance, setPerformance] = useState<PerformanceLevel | null>(null);
@@ -98,7 +97,7 @@ export default function LogScreen() {
   const { dayName, dayMonth } = getLogScreenDate();
 
   return (
-    <SafeAreaView style={styles.root}>
+    <View style={styles.root}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.flex}
@@ -106,78 +105,82 @@ export default function LogScreen() {
         <ScrollView
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
-          bounces={false}
+          bounces={true}
+          contentContainerStyle={styles.scrollContent}
         >
-          {/* ── 1. YELLOW BLOCK ── */}
-          <View style={styles.yellowBlock}>
+          {/* ── 1. YELLOW HEADER BLOCK (Edge-to-Edge) ── */}
+          <View style={[styles.yellowBlock, { paddingTop: insets.top + SPACING.md }]}>
             <Pressable
               onPress={() => router.back()}
               style={styles.backButton}
               accessible={true}
               accessibilityLabel="Go back"
             >
-              <Text style={styles.backChevron}>‹</Text>
+              <Ionicons name="chevron-back" size={24} color={COLORS.textOnYellow} />
             </Pressable>
 
             <Text style={styles.todayLabel}>TODAY</Text>
             <Text style={styles.dateHeadline}>{`${dayName}\n${dayMonth}`}</Text>
 
-            {/* Sport pill — shows selected sport, tapping it opens picker below */}
+            {/* Sport pill */}
             <View style={styles.sportPill}>
               <Text style={styles.sportPillText}>{sport.toUpperCase()}</Text>
               <Text style={styles.sportPillChange}>· change below</Text>
             </View>
           </View>
 
-          {/* Sport picker */}
-          <View style={styles.whiteSection}>
-            <Text style={styles.sectionLabel}>SPORT</Text>
-            <SportPicker value={sport} onChange={setSport} />
-          </View>
+          {/* Wrapper for white picker sections */}
+          <View style={styles.mainContent}>
+            {/* Sport picker */}
+            <View style={styles.whiteSection}>
+              <Text style={styles.sectionLabel}>SPORT</Text>
+              <SportPicker value={sport} onChange={setSport} />
+            </View>
 
-          <View style={styles.divider} />
+            <View style={styles.divider} />
 
-          {/* ── 2. MOOD SLIDER ── */}
-          <View style={styles.whiteSection}>
-            <MoodPicker value={mood} onChange={setMood} />
-          </View>
+            {/* ── 2. MOOD SLIDER ── */}
+            <View style={styles.whiteSection}>
+              <MoodPicker value={mood} onChange={setMood} />
+            </View>
 
-          <View style={styles.divider} />
+            <View style={styles.divider} />
 
-          {/* ── 3. PERFORMANCE PILLS ── */}
-          <Animated.View style={shakeStyle}>
-            <PerformancePicker
-              value={performance}
-              onChange={(p) => {
-                setPerformance(p);
-                setPerfError(false);
-              }}
-              hasError={perfError}
-            />
-          </Animated.View>
-
-          <View style={styles.divider} />
-
-          {/* ── 4. NOTES ── */}
-          <View style={[styles.whiteSection, styles.notesSection]}>
-            <Text style={styles.sectionLabel}>NOTES (OPTIONAL)</Text>
-            <View style={styles.inputWrapper}>
-              <TextInput
-                style={styles.input}
-                placeholder="Felt strong today..."
-                placeholderTextColor="#CCCCCC"
-                value={notes}
-                onChangeText={setNotes}
-                multiline={false}
-                returnKeyType="done"
-                accessible={true}
-                accessibilityLabel="Session notes"
+            {/* ── 3. PERFORMANCE PILLS ── */}
+            <Animated.View style={shakeStyle}>
+              <PerformancePicker
+                value={performance}
+                onChange={(p) => {
+                  setPerformance(p);
+                  setPerfError(false);
+                }}
+                hasError={perfError}
               />
+            </Animated.View>
+
+            <View style={styles.divider} />
+
+            {/* ── 4. NOTES ── */}
+            <View style={[styles.whiteSection, styles.notesSection]}>
+              <Text style={styles.sectionLabel}>NOTES (OPTIONAL)</Text>
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Felt strong today..."
+                  placeholderTextColor="#CCCCCC"
+                  value={notes}
+                  onChangeText={setNotes}
+                  multiline={false}
+                  returnKeyType="done"
+                  accessible={true}
+                  accessibilityLabel="Session notes"
+                />
+              </View>
             </View>
           </View>
 
-          {/* ── 5. RED BLOCK — Save ── */}
-          <View style={styles.redBlock}>
+          {/* ── 5. RED BLOCK — Save (Stretches to absolute bottom) ── */}
+          <View style={[styles.redBlock, { paddingBottom: Math.max(insets.bottom, SPACING.md) }]}>
             <Pressable
               style={styles.saveButton}
               onPress={handleSave}
@@ -190,7 +193,7 @@ export default function LogScreen() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -202,11 +205,17 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  mainContent: {
+    backgroundColor: '#FFFFFF',
+  },
 
   // Yellow block
   yellowBlock: {
     backgroundColor: COLORS.primary,
-    padding: SPACING.md,
+    paddingHorizontal: SPACING.md,
     paddingBottom: 22,
   },
   backButton: {
@@ -214,10 +223,6 @@ const styles = StyleSheet.create({
     minHeight: 44,
     justifyContent: 'center',
     alignSelf: 'flex-start',
-  },
-  backChevron: {
-    fontSize: 20,
-    color: COLORS.textOnYellow,
   },
   todayLabel: {
     fontSize: 11,
@@ -292,7 +297,11 @@ const styles = StyleSheet.create({
   // Red block
   redBlock: {
     backgroundColor: COLORS.accentRed,
-    padding: SPACING.md,
+    paddingHorizontal: SPACING.md,
+    paddingTop: SPACING.md,
+    flexGrow: 1,
+    justifyContent: 'center',
+    minHeight: 120,
   },
   saveButton: {
     backgroundColor: '#FFFFFF',

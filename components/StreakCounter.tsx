@@ -48,35 +48,48 @@ export function StreakCounter({ streak }: StreakCounterProps) {
   }
 
   return (
-    <View style={styles.pill}>
-      <Text style={styles.fire}>🔥</Text>
-      <Text style={styles.number}>{displayCount}</Text>
-      <Text style={styles.label}>DAY STREAK</Text>
+    <View style={styles.container}>
+      <View style={styles.pill}>
+        <Text style={styles.fire}>🔥</Text>
+        <Text style={styles.number}>{displayCount}</Text>
+        <Text style={styles.label}>DAY STREAK</Text>
+      </View>
+      {streak === 1 && (
+        <Text style={styles.encouragingText}>Keep it going tomorrow!</Text>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: SPACING.md,
+  },
   pill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
     backgroundColor: COLORS.black,
     borderRadius: 9999,
-    paddingVertical: 5,
-    paddingHorizontal: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
     alignSelf: 'flex-start',
-    marginBottom: SPACING.md,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
   fire: {
-    fontSize: 14,
+    fontSize: 18,
   },
   number: {
     ...TYPOGRAPHY.streakNumber,
+    fontSize: 18,
   },
   label: {
-    fontSize: 9,
-    fontWeight: '700',
+    fontSize: 11,
+    fontWeight: '800',
     color: '#888888',
     letterSpacing: 2,
     textTransform: 'uppercase',
@@ -85,5 +98,12 @@ const styles = StyleSheet.create({
     ...TYPOGRAPHY.caption,
     color: COLORS.textMuted,
     marginBottom: SPACING.md,
+  },
+  encouragingText: {
+    color: COLORS.textMuted,
+    fontSize: 11,
+    fontStyle: 'italic',
+    marginTop: 6,
+    marginLeft: 4,
   },
 });

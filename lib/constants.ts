@@ -146,8 +146,8 @@ export const TYPOGRAPHY = {
 
   // App name — ATHLETE DIARY
   appName: {
-    fontSize: 11,
-    fontWeight: '800' as const,
+    fontSize: 14,
+    fontWeight: '900' as const,
     letterSpacing: 3,
     textTransform: 'uppercase' as const,
     color: COLORS.textOnYellow,

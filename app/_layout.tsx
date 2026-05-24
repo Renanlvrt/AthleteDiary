@@ -1,7 +1,7 @@
 // ============================================================
-// app/_layout.tsx — Root layout: dark theme, expo-router setup
-// Handles notification tap → deep link to /log
-// Re-schedules training reminders on every launch
+// app/_layout.tsx — Root layout: dark status bar, expo-router setup
+// Refactored to enable individual screen full-screen design.
+// Removed global dark background constraint from stack navigator contentStyle.
 // ============================================================
 
 import * as Notifications from 'expo-notifications';
@@ -11,6 +11,7 @@ import React, { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useSchedule } from '../hooks/useSchedule';
 import { scheduleTrainingReminders } from '../lib/notifications';
+import { COLORS } from '../lib/constants';
 
 export default function RootLayout() {
   const router = useRouter();
@@ -38,12 +39,14 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
+      {/* Set status bar to dark text, assuming a bright background ground */}
       <StatusBar style="dark" />
       <Stack
         screenOptions={{
           headerShown: false,
           animation: 'fade',
-          contentStyle: { backgroundColor: '#0A0A0A' },
+          // Removed: contentStyle: { backgroundColor: '#0A0A0A' },
+          // Allows individual screens to control their background fully
         }}
       >
         <Stack.Screen name="index" />
