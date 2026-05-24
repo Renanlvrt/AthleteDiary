@@ -1,0 +1,244 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'SF Pro Display',sans-serif;background:#f0f0f0;}
+.wrap{display:flex;flex-direction:column;gap:32px;padding:20px 16px;align-items:center;}
+.screen-lbl{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;text-align:center;}
+.phone{width:310px;background:#fff;border-radius:38px;overflow:hidden;border:3px solid #222;position:relative;}
+.notch-bar{background:#FFE500;height:32px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;}
+.notch-pill{width:80px;height:20px;background:#222;border-radius:10px;}
+
+/* YELLOW BLOCK */
+.yblock{background:#FFE500;padding:16px 18px 20px;}
+.yblock-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.app-name{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#000;}
+.gear{width:30px;height:30px;background:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#FFE500;font-size:13px;}
+.streak-pill{display:inline-flex;align-items:center;gap:6px;background:#000;border-radius:100px;padding:5px 12px;margin-bottom:12px;}
+.streak-num{font-size:14px;font-weight:900;color:#FFE500;letter-spacing:-0.5px;}
+.streak-label{font-size:9px;font-weight:700;color:#888;letter-spacing:2px;text-transform:uppercase;}
+.hero-text{font-size:36px;font-weight:900;color:#000;letter-spacing:-1.5px;line-height:1.0;text-transform:uppercase;}
+.hero-sub{font-size:11px;font-weight:600;color:#000;opacity:0.4;letter-spacing:1px;text-transform:uppercase;margin-top:4px;}
+
+/* WHITE BLOCK */
+.wblock{background:#fff;padding:16px 18px;}
+.section-lbl{font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#bbb;margin-bottom:10px;}
+
+/* GRID */
+.grid-row{display:flex;gap:2px;}
+.grid-col{display:flex;flex-direction:column;gap:2px;}
+.cell{width:9px;height:9px;border-radius:1.5px;}
+.c-empty{background:#EBEBEB;}
+.c-future{background:#F5F5F5;}
+.c-great{background:#22C55E;}
+.c-good{background:#86EFAC;}
+.c-okay{background:#F97316;}
+.c-bad{background:#EF4444;}
+.c-today{background:#EBEBEB;outline:2px solid #222;outline-offset:-1px;}
+.month-row{display:flex;gap:2px;margin-bottom:4px;}
+.mlbl{font-size:7px;color:#ccc;font-weight:700;flex:1;text-align:center;letter-spacing:0.3px;}
+
+/* RED BLOCK */
+.rblock{background:#E5232A;padding:16px 18px;}
+.rblock-head{font-size:22px;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:-1px;line-height:1.1;margin-bottom:12px;}
+
+/* CARDS */
+.card{background:#fff;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.card-ico{font-size:18px;}
+.card-info{flex:1;}
+.card-name{font-size:12px;font-weight:800;color:#000;}
+.card-meta{font-size:10px;color:#aaa;margin-top:1px;}
+.card-right{display:flex;align-items:center;gap:6px;}
+.mood-dot{width:10px;height:10px;border-radius:50%;}
+.perf-lbl{font-size:9px;font-weight:800;color:#bbb;letter-spacing:1px;}
+
+/* FAB */
+.fab-wrap{padding:16px 18px;background:#fff;}
+.fab{background:#000;border-radius:14px;height:50px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.fab-plus{font-size:22px;font-weight:300;color:#FFE500;line-height:1;}
+.fab-txt{font-size:11px;font-weight:800;color:#FFE500;letter-spacing:2px;text-transform:uppercase;}
+
+/* LOG SCREEN */
+.log-yblock{background:#FFE500;padding:16px 18px 22px;}
+.log-back{font-size:20px;font-weight:400;color:#000;margin-bottom:16px;display:inline-block;}
+.log-day{font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#000;opacity:0.4;}
+.log-date{font-size:30px;font-weight:900;letter-spacing:-1px;color:#000;text-transform:uppercase;line-height:1.0;}
+.sport-confirmed{display:inline-flex;align-items:center;gap:6px;background:#000;border-radius:100px;padding:5px 14px;margin-top:12px;}
+.sport-ico{font-size:13px;}
+.sport-name{font-size:10px;font-weight:800;color:#FFE500;letter-spacing:2px;text-transform:uppercase;}
+.sport-change{font-size:9px;color:#666;margin-left:4px;letter-spacing:1px;}
+
+/* MOOD SLIDER */
+.mood-section{padding:20px 18px 16px;}
+.mood-qlbl{font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#bbb;margin-bottom:16px;}
+.slider-container{position:relative;height:44px;margin-bottom:8px;}
+.slider-track{height:14px;border-radius:7px;background:linear-gradient(to right,#991B1B,#EF4444 25%,#F97316 50%,#86EFAC 75%,#22C55E);margin-top:15px;}
+.slider-thumb{width:28px;height:28px;background:#fff;border-radius:50%;border:3px solid #222;position:absolute;top:8px;cursor:grab;transform:translateX(-50%);transition:border-color 0.15s;}
+.mood-labels{display:flex;justify-content:space-between;}
+.mood-lbl-l{font-size:9px;font-weight:700;color:#EF4444;letter-spacing:1px;text-transform:uppercase;}
+.mood-lbl-r{font-size:9px;font-weight:700;color:#22C55E;letter-spacing:1px;text-transform:uppercase;}
+.mood-current{text-align:center;font-size:13px;font-weight:900;letter-spacing:1px;text-transform:uppercase;margin-top:6px;}
+
+/* PERFORMANCE */
+.perf-section{padding:0 18px 16px;}
+.perf-pills{display:flex;gap:5px;}
+.pp{flex:1;padding:9px 0;border-radius:100px;border:2px solid #eee;text-align:center;font-size:9px;font-weight:800;color:#bbb;letter-spacing:1px;text-transform:uppercase;}
+.pp.sel{background:#FFE500;border-color:#FFE500;color:#000;}
+
+/* SAVE */
+.save-rblock{background:#E5232A;padding:18px;}
+.save-btn{background:#fff;border-radius:12px;padding:14px;text-align:center;}
+.save-btn-txt{font-size:11px;font-weight:900;color:#E5232A;letter-spacing:3px;text-transform:uppercase;}
+
+.divider{height:1px;background:#f0f0f0;margin:0 18px;}
+</style>
+
+<div class="wrap">
+
+<div>
+  <div class="screen-lbl">Home — Dashboard</div>
+  <div class="phone">
+    <div class="notch-bar"><div class="notch-pill"></div></div>
+
+    <div class="yblock">
+      <div class="yblock-nav">
+        <div class="app-name">Athlete Diary</div>
+        <div class="gear">+</div>
+      </div>
+      <div class="streak-pill">
+        <span style="font-size:14px;">🔥</span>
+        <span class="streak-num">47</span>
+        <span class="streak-label">Day Streak</span>
+      </div>
+      <div class="hero-text">Train.<br>Log.<br>Grow.</div>
+      <div class="hero-sub">Sunday 25 May 2026</div>
+    </div>
+
+    <div class="wblock">
+      <div class="section-lbl">This Year</div>
+      <div class="month-row" id="mlbls"></div>
+      <div id="homegrid" style="display:flex;gap:2px;"></div>
+    </div>
+
+    <div class="rblock">
+      <div class="rblock-head">Recent<br>Sessions</div>
+      <div class="card">
+        <div class="card-ico">🏃</div>
+        <div class="card-info">
+          <div class="card-name">Running</div>
+          <div class="card-meta">Today · 6.4 km</div>
+        </div>
+        <div class="card-right">
+          <div class="mood-dot" style="background:#22C55E;"></div>
+          <div class="perf-lbl">PEAK</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-ico">🏋️</div>
+        <div class="card-info">
+          <div class="card-name">Gym</div>
+          <div class="card-meta">Yesterday</div>
+        </div>
+        <div class="card-right">
+          <div class="mood-dot" style="background:#86EFAC;"></div>
+          <div class="perf-lbl">GOOD</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fab-wrap">
+      <div class="fab">
+        <div class="fab-plus">+</div>
+        <div class="fab-txt">Log Session</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="screen-lbl">Log Session — Auto-filled</div>
+  <div class="phone">
+    <div class="notch-bar"><div class="notch-pill"></div></div>
+
+    <div class="log-yblock">
+      <div class="log-back">‹</div>
+      <div class="log-day">Today</div>
+      <div class="log-date">Sunday<br>25 May</div>
+      <div class="sport-confirmed">
+        <span class="sport-ico">🏃</span>
+        <span class="sport-name">Running</span>
+        <span class="sport-change">· change</span>
+      </div>
+    </div>
+
+    <div class="mood-section">
+      <div class="mood-qlbl">How did you feel?</div>
+      <div class="slider-container">
+        <div class="slider-track" id="track"></div>
+        <div class="slider-thumb" id="thumb" style="left:80%;border-color:#22C55E;"></div>
+      </div>
+      <div class="mood-labels">
+        <div class="mood-lbl-l">Terrible</div>
+        <div class="mood-lbl-r">Great</div>
+      </div>
+      <div class="mood-current" id="moodLabel" style="color:#22C55E;">GREAT</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="perf-section" style="padding-top:16px;">
+      <div class="section-lbl" style="margin-bottom:10px;">How did you perform?</div>
+      <div class="perf-pills">
+        <div class="pp">POOR</div>
+        <div class="pp">BELOW</div>
+        <div class="pp">AVG</div>
+        <div class="pp sel">GOOD</div>
+        <div class="pp">PEAK</div>
+      </div>
+    </div>
+
+    <div class="divider" style="margin-top:16px;"></div>
+
+    <div style="padding:14px 18px;">
+      <div class="section-lbl" style="margin-bottom:8px;">Notes (optional)</div>
+      <div style="background:#f7f7f7;border-radius:10px;padding:10px 12px;">
+        <div style="font-size:12px;color:#ccc;font-style:italic;">Felt strong today...</div>
+      </div>
+    </div>
+
+    <div class="save-rblock">
+      <div class="save-btn">
+        <div class="save-btn-txt">Save Session</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const moodColors=['#991B1B','#EF4444','#F97316','#86EFAC','#22C55E'];
+const moodNames=['TERRIBLE','BAD','OKAY','GOOD','GREAT'];
+const clrs=['c-empty','c-great','c-great','c-good','c-empty','c-okay','c-great','c-great','c-good','c-great','c-empty','c-okay','c-great','c-bad','c-great','c-empty','c-great','c-good','c-great','c-empty','c-great','c-great','c-okay','c-empty','c-great','c-good','c-great','c-great','c-empty','c-okay','c-great','c-great','c-bad','c-empty','c-good','c-great','c-okay','c-great','c-great','c-empty','c-great','c-good','c-empty','c-okay','c-great','c-great','c-good','c-empty','c-great','c-okay','c-great','c-great'];
+const COLS=22,ROWS=7;
+const months=['J','F','M','A','M','J','J','A','S','O','N','D'];
+const mlbls=document.getElementById('mlbls');
+months.forEach(m=>{const d=document.createElement('div');d.className='mlbl';d.textContent=m;mlbls.appendChild(d);});
+const grid=document.getElementById('homegrid');
+for(let c=0;c<COLS;c++){const col=document.createElement('div');col.className='grid-col';for(let r=0;r<ROWS;r++){const cell=document.createElement('div');const idx=c*ROWS+r;if(c===COLS-1&&r===2){cell.className='cell c-today';}else if(c>=COLS-1&&r>2){cell.className='cell c-future';}else{cell.className='cell '+(clrs[idx%clrs.length]);}col.appendChild(cell);}grid.appendChild(col);}
+
+const thumb=document.getElementById('thumb');
+const track=document.getElementById('track');
+const moodLabel=document.getElementById('moodLabel');
+let dragging=false,startX=0,startLeft=0;
+function getMoodIdx(pct){return Math.min(4,Math.max(0,Math.round(pct/100*4)));}
+function updateMood(pct){const idx=getMoodIdx(pct);thumb.style.borderColor=moodColors[idx];moodLabel.textContent=moodNames[idx];moodLabel.style.color=moodColors[idx];}
+thumb.addEventListener('mousedown',e=>{dragging=true;startX=e.clientX;startLeft=parseFloat(thumb.style.left)||80;e.preventDefault();});
+document.addEventListener('mousemove',e=>{if(!dragging)return;const tw=track.offsetWidth;const dx=e.clientX-startX;const newPct=Math.min(100,Math.max(0,startLeft+dx/tw*100));thumb.style.left=newPct+'%';updateMood(newPct);});
+document.addEventListener('mouseup',()=>{dragging=false;});
+thumb.addEventListener('touchstart',e=>{dragging=true;startX=e.touches[0].clientX;startLeft=parseFloat(thumb.style.left)||80;},{passive:true});
+document.addEventListener('touchmove',e=>{if(!dragging)return;const tw=track.offsetWidth;const dx=e.touches[0].clientX-startX;const newPct=Math.min(100,Math.max(0,startLeft+dx/tw*100));thumb.style.left=newPct+'%';updateMood(newPct);},{passive:true});
+document.addEventListener('touchend',()=>{dragging=false;});
+updateMood(80);
+
+document.querySelectorAll('.pp').forEach((p,i)=>{p.addEventListener('click',()=>{document.querySelectorAll('.pp').forEach(x=>x.classList.remove('sel'));p.classList.add('sel');});});
+</script>

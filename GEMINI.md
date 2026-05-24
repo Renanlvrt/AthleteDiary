@@ -8,7 +8,7 @@ AthleteDiary is a **bold, editorial-design sports performance diary app** for iO
 Built with React Native + Expo (managed workflow). 100% local — no backend, no accounts.
 
 **Project directory:** `c:\Users\renan\Desktop\Side_projects\AthleteDiary`
-**Design references:** `c:\Users\renan\Desktop\Side_projects\Mood Tracker (mobile)\frontend\`
+**Design references:** `frontend/`
 
 ## Key Files to Read Before Working
 
@@ -67,6 +67,6 @@ Mood gradient: #991B1B → #EF4444 → #F97316 → #86EFAC → #22C55E (slider t
 ## Token Efficiency Tips (for AI agents)
 
 - Check `lib/constants.ts` before creating any UI — tokens are already defined
-- Design target: `c:\Users\renan\Desktop\Side_projects\Mood Tracker (mobile)\frontend\home screen.png`
-- Log screen target: `c:\Users\renan\Desktop\Side_projects\Mood Tracker (mobile)\frontend\log session.png`
+- Design target: `frontend/home screen.png`
+- Log screen target: `frontend/log session.png`
 - The `.ecc/skills/` files contain detailed how-to for each domain
