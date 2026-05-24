@@ -41,7 +41,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const { sessions, refresh } = useSessions();
   const { schedule } = useSchedule();
-  const streak = useStreak(sessions);
+  const streak = useStreak(sessions, schedule.isConfigured ? schedule.slots : []);
   const insets = useSafeAreaInsets();
 
   useFocusEffect(

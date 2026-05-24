@@ -4,8 +4,8 @@
 
 import { useMemo } from 'react';
 import { calculateStreak } from '../lib/streak';
-import { Session } from '../lib/types';
+import { Session, TrainingSlot } from '../lib/types';
 
-export function useStreak(sessions: Session[]): number {
-  return useMemo(() => calculateStreak(sessions), [sessions]);
+export function useStreak(sessions: Session[], slots?: TrainingSlot[]): number {
+  return useMemo(() => calculateStreak(sessions, slots), [sessions, slots]);
 }
