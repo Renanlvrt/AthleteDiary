@@ -95,7 +95,7 @@ export const MoodGrid = React.memo(({ sessions }: MoodGridProps) => {
                 key={startCol}
                 style={[
                   styles.monthLabel,
-                  { marginLeft: startCol === 0 ? 0 : (startCol * (CELL_SIZE + CELL_GAP)) },
+                  { left: startCol * (CELL_SIZE + CELL_GAP) },
                 ]}
               >
                 <Text style={styles.monthText}>{label}</Text>
@@ -161,13 +161,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 4,
     position: 'relative',
+    height: 12, // Prevent layout collapse so months are visible
   },
   monthLabel: {
     position: 'absolute',
   },
   monthText: {
     fontSize: 7,
-    color: '#CCCCCC',
+    color: '#888888', // More readable contrast against light cream card background
     fontWeight: '700',
     letterSpacing: 0.3,
   },
