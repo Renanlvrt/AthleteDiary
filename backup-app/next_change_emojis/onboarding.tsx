@@ -8,7 +8,7 @@
 // Target: ~45s with schedule, ~15s if skipped
 // ============================================================
 
-import { Ionicons, MaterialCommunityIcons, Feather, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import React, { useRef, useState, useEffect } from 'react';
@@ -59,47 +59,6 @@ const INITIAL_SLOTS: DaySlot[] = [
 
 function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-}
-
-function renderOnboardingIcon(type: string, color: string, size: number = 32) {
-  switch (type) {
-    // Sports (Blue)
-    case 'running':
-      return <MaterialCommunityIcons name="run" size={size} color={color} />;
-    case 'gym':
-      return <MaterialCommunityIcons name="weight-lifter" size={size} color={color} />;
-    case 'cycling':
-      return <MaterialCommunityIcons name="bike" size={size} color={color} />;
-    case 'swimming':
-      return <MaterialCommunityIcons name="swim" size={size} color={color} />;
-    case 'football':
-      return <MaterialCommunityIcons name="soccer" size={size} color={color} />;
-    case 'basketball':
-      return <MaterialCommunityIcons name="basketball-hoop-outline" size={size} color={color} />;
-    case 'other':
-      return <Feather name="target" size={size} color={color} />;
-    case 'plus':
-      return <Feather name="plus" size={size} color={color} />;
-
-    // Goals (Orange)
-    case 'consistency':
-      return <MaterialCommunityIcons name="calendar-check-outline" size={size} color={color} />;
-    case 'performance':
-      return <MaterialCommunityIcons name="trophy-outline" size={size} color={color} />;
-    case 'recovery':
-      return <Ionicons name="accessibility-outline" size={size} color={color} />;
-    case 'motivation':
-      return <Ionicons name="flame-outline" size={size} color={color} />;
-
-    // Schedule (Purple) & Streak (Red)
-    case 'schedule':
-      return <Feather name="calendar" size={size} color={color} />;
-    case 'streak':
-      return <Ionicons name="flame" size={size} color={color} />;
-
-    default:
-      return null;
-  }
 }
 
 const GOALS: { key: TrainingGoal; label: string; sub: string; icon: string }[] = [
@@ -398,9 +357,9 @@ function Screen1Welcome({ insets, width, onNext, btnAnimStyle, pressIn, pressOut
 
           {/* Glass sport icons */}
           <View style={s1.iconRow}>
-            {['running', 'gym', 'cycling', 'plus'].map((type, i) => (
+            {['🏃', '🏋️', '🚴', '+'].map((icon, i) => (
               <View key={i} style={s1.glassIcon}>
-                {renderOnboardingIcon(type, '#2563EB', 24)}
+                <Text style={s1.glassIconText}>{icon}</Text>
               </View>
             ))}
           </View>
@@ -555,9 +514,7 @@ function Screen2Sports({ insets, width, selectedSports, onToggle, onNext, onBack
               accessibilityRole="checkbox"
               accessibilityState={{ checked: active }}
             >
-              <View style={{ marginBottom: 6 }}>
-                {renderOnboardingIcon(sport, active ? COLORS.black : '#2563EB', 32)}
-              </View>
+              <Text style={s2.sportEmoji}>{SPORT_ICONS[sport]}</Text>
               <Text style={[s2.sportLabel, active && s2.sportLabelActive]}>
                 {SPORT_FULL_NAMES[sport].toUpperCase()}
               </Text>
@@ -728,9 +685,7 @@ function Screen3Goal({ insets, width, selectedGoal, onSelect, onNext, onBack, bt
               accessibilityRole="radio"
               accessibilityState={{ selected: active }}
             >
-              <View style={{ width: 40, alignItems: 'center', justifyContent: 'center' }}>
-                {renderOnboardingIcon(goal.key, active ? COLORS.black : '#EA580C', 32)}
-              </View>
+              <Text style={s3.goalIcon}>{goal.icon}</Text>
               <View style={s3.goalText}>
                 <Text style={[s3.goalLabel, active && s3.goalLabelActive]}>{goal.label}</Text>
                 <Text style={[s3.goalSub, active && s3.goalSubActive]}>{goal.sub}</Text>
@@ -1061,9 +1016,7 @@ function Screen5AllSet({ insets, width, selectedSports, selectedGoal, hasSchedul
             {/* Row 1: Sports & Goal */}
             <View style={s5.row}>
               <View style={[s5.bentoCard, s5.bentoCardHalf]}>
-                <View style={s5.iconCircle}>
-                  {renderOnboardingIcon(selectedSports[0] || 'running', COLORS.black, 20)}
-                </View>
+                <View style={s5.iconCircle}><Text style={s5.iconTxt}>🏃</Text></View>
                 <View style={s5.cardTextGroup}>
                   <Text style={s5.cardLabel}>Sports</Text>
                   <Text style={s5.cardValue}>
@@ -1075,9 +1028,7 @@ function Screen5AllSet({ insets, width, selectedSports, selectedGoal, hasSchedul
               </View>
 
               <View style={[s5.bentoCard, s5.bentoCardHalf]}>
-                <View style={s5.iconCircle}>
-                  {renderOnboardingIcon(selectedGoal || 'motivation', COLORS.black, 20)}
-                </View>
+                <View style={s5.iconCircle}><Text style={s5.iconTxt}>🎯</Text></View>
                 <View style={s5.cardTextGroup}>
                   <Text style={s5.cardLabel}>Goal</Text>
                   <Text style={s5.cardValue}>{goalInfo ? goalInfo.label : 'Not set'}</Text>
@@ -1087,9 +1038,7 @@ function Screen5AllSet({ insets, width, selectedSports, selectedGoal, hasSchedul
 
             {/* Row 2: Schedule (Full Width) */}
             <View style={[s5.bentoCard, s5.bentoCardFull]}>
-              <View style={s5.iconCircle}>
-                {renderOnboardingIcon('schedule', COLORS.black, 20)}
-              </View>
+              <View style={s5.iconCircle}><Text style={s5.iconTxt}>📅</Text></View>
               <View style={s5.cardTextGroup}>
                 <Text style={s5.cardLabel}>Schedule</Text>
                 <Text style={s5.cardValue}>{hasSchedule ? 'Reminders on' : 'Set up later'}</Text>
@@ -1098,9 +1047,7 @@ function Screen5AllSet({ insets, width, selectedSports, selectedGoal, hasSchedul
 
             {/* Row 3: Streak (Full Width Inactive) */}
             <View style={[s5.bentoCard, s5.bentoCardFull, s5.bentoInactive]}>
-              <View style={[s5.iconCircle, s5.iconInactive]}>
-                {renderOnboardingIcon('streak', '#888888', 20)}
-              </View>
+              <View style={[s5.iconCircle, s5.iconInactive]}><Text style={s5.iconTxt}>🔥</Text></View>
               <View style={s5.cardTextGroup}>
                 <Text style={s5.cardLabel}>Streak</Text>
                 <Text style={s5.cardValue}>Log today to start</Text>

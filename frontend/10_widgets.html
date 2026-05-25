@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Athlete Diary - 10 Widget Designs</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    background: #e8e8ed; /* Standard iOS blurred background vibe */
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  h2 {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .widget-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    max-width: 800px;
+  }
+
+  /* WIDGET BASE STYLES */
+  .widget {
+    border-radius: 22px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .w-small { width: 160px; height: 160px; }
+  .w-medium { width: 344px; height: 160px; }
+  .w-large { width: 344px; height: 344px; }
+
+  /* COLORS */
+  .bg-black { background: #000; color: #fff; }
+  .bg-yellow { background: #FFE500; color: #000; }
+  .bg-white { background: #fff; color: #000; }
+  .text-yellow { color: #FFE500; }
+
+  /* ---------------------------------------------------
+     1. PURE FIRE (Small)
+  --------------------------------------------------- */
+  .w1-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .w1-fire { font-size: 32px; margin-bottom: -4px; }
+  .w1-num { font-size: 56px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+  .w1-lbl { font-size: 10px; font-weight: 800; letter-spacing: 2px; opacity: 0.7; margin-top: 4px; }
+
+  /* ---------------------------------------------------
+     2. QUICK ACTION (Small)
+  --------------------------------------------------- */
+  .w2 { padding: 14px; justify-content: space-between; }
+  .streak-pill { display: inline-flex; align-items: center; gap: 4px; background: #000; border-radius: 100px; padding: 4px 10px; align-self: flex-start; }
+  .streak-pill.white-bg { background: #fff; }
+  .sp-icon { font-size: 12px; }
+  .sp-num { font-size: 12px; font-weight: 900; color: #FFE500; }
+  .streak-pill.white-bg .sp-num { color: #000; }
+  .w2-btn { background: #000; color: #FFE500; border-radius: 14px; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; letter-spacing: 1px; }
+
+  /* ---------------------------------------------------
+     3. LAST SESSION RECAP (Small)
+  --------------------------------------------------- */
+  .w3 { padding: 16px; justify-content: space-between; }
+  .w3-title { font-size: 9px; font-weight: 800; color: #bbb; letter-spacing: 2px; text-transform: uppercase; }
+  .w3-icon-box { width: 44px; height: 44px; background: #000; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .w3-bottom { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot.peak { background: #22C55E; }
+  .w3-desc { font-size: 11px; font-weight: 800; color: #000; }
+  .w3-sub { font-size: 10px; font-weight: 600; color: #888; margin-top: 2px;}
+
+  /* ---------------------------------------------------
+     4. MOOD RING (Small)
+  --------------------------------------------------- */
+  .w4 { padding: 16px; justify-content: space-between; align-items: center; }
+  .w4-title { font-size: 9px; font-weight: 800; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-top: 8px;}
+  .w4-dots { display: flex; gap: 6px; margin-top: 30px;}
+  .mdot { width: 12px; height: 12px; border-radius: 50%; }
+  .c-bad { background: #EF4444; } .c-ok { background: #F97316; } .c-good { background: #86EFAC; } .c-peak { background: #22C55E; } .c-empty { background: #333; }
+
+  /* ---------------------------------------------------
+     5. CONSISTENCY GRID (Medium)
+  --------------------------------------------------- */
+  .w5 { padding: 16px; flex-direction: row; gap: 16px; }
+  .w5-left { display: flex; flex-direction: column; justify-content: space-between; width: 80px; }
+  .w5-btn { background: #000; color: #FFE500; border-radius: 10px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 900; letter-spacing: 1px; }
+  .grid-container { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; flex: 1; }
+  .g-cell { background: #EBEBEB; border-radius: 3px; height: 100%; aspect-ratio: 1; }
+  .g-peak { background: #22C55E; } .g-good { background: #86EFAC; } .g-ok { background: #F97316; } .g-bad { background: #EF4444; }
+  .g-today { outline: 2px solid #000; outline-offset: -1px; }
+
+  /* ---------------------------------------------------
+     6. THE DASHBOARD (Medium)
+  --------------------------------------------------- */
+  .w6 { padding: 16px; justify-content: space-between; }
+  .w6-top { display: flex; justify-content: space-between; align-items: center; }
+  .w6-sched { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+  .w6-card { background: #fff; border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 12px; }
+  .w6-card-icon { width: 36px; height: 36px; background: #f5f5f5; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .w6-card-info { flex: 1; }
+  .w6-card-title { font-size: 13px; font-weight: 900; color: #000; text-transform: uppercase; }
+  .w6-card-sub { font-size: 10px; color: #888; font-weight: 600; margin-top: 2px;}
+  .w6-tag { background: rgba(34, 197, 94, 0.15); color: #22C55E; padding: 4px 8px; border-radius: 6px; font-size: 9px; font-weight: 900; letter-spacing: 1px;}
+
+  /* ---------------------------------------------------
+     7. WEEKLY TARGET (Medium)
+  --------------------------------------------------- */
+  .w7 { padding: 20px; justify-content: space-between; }
+  .w7-title { font-size: 14px; font-weight: 900; color: #FFE500; letter-spacing: 2px; }
+  .w7-circles { display: flex; justify-content: space-between; align-items: center; margin-top: 10px;}
+  .t-circle { width: 44px; height: 44px; border-radius: 50%; border: 3px solid #FFE500; display: flex; align-items: center; justify-content: center; }
+  .t-circle.done { background: #FFE500; color: #000; font-size: 16px; font-weight: 900; }
+  .t-circle.empty { border-color: #333; }
+
+  /* ---------------------------------------------------
+     8. NEXT UP SCHEDULE (Medium)
+  --------------------------------------------------- */
+  .w8-top { background: #FFE500; flex: 1; padding: 16px; display: flex; justify-content: space-between; align-items: center; }
+  .w8-bottom { background: #fff; flex: 1; padding: 16px; display: flex; align-items: center;}
+  .w8-time { font-size: 24px; font-weight: 900; letter-spacing: -1px; }
+  .w8-sub { font-size: 10px; font-weight: 800; opacity: 0.5; text-transform: uppercase; letter-spacing: 2px;}
+  .w8-btn { background: #000; color: #FFE500; border-radius: 12px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase;}
+
+  /* ---------------------------------------------------
+     9. MACRO GRID (Large)
+  --------------------------------------------------- */
+  .w9 { padding: 20px; }
+  .w9-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .w9-app { font-size: 12px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; color: #ccc;}
+  .macro-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; flex: 1; }
+  
+  /* ---------------------------------------------------
+     10. DEEP DIVE (Large)
+  --------------------------------------------------- */
+  .w10-top { background: #FFE500; height: 140px; padding: 20px; display: flex; justify-content: space-between; }
+  .w10-bottom { background: #fff; flex: 1; padding: 20px; }
+  .w10-stat { display: flex; flex-direction: column; }
+  .w10-stat-val { font-size: 32px; font-weight: 900; letter-spacing: -1px; line-height: 1; }
+  .w10-stat-lbl { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; margin-top: 4px;}
+  .w10-note-box { background: #f5f5f5; border-radius: 14px; padding: 16px; margin-top: 10px; height: 100px;}
+  .w10-note-text { font-size: 13px; color: #555; font-style: italic; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+  <div>
+    <h2>Small Widgets (2x2)</h2>
+    <div class="widget-container">
+      
+      <div class="widget w-small bg-black">
+        <div class="w1-content">
+          <div class="w1-fire">🔥</div>
+          <div class="w1-num text-yellow">47</div>
+          <div class="w1-lbl text-yellow">DAY STREAK</div>
+        </div>
+      </div>
+
+      <div class="widget w-small bg-yellow w2">
+        <div class="streak-pill">
+          <span class="sp-icon">🔥</span>
+          <span class="sp-num">47</span>
+        </div>
+        <div class="w2-btn">+ LOG SESSION</div>
+      </div>
+
+      <div class="widget w-small bg-white w3">
+        <div class="w3-title">Last Session</div>
+        <div class="w3-icon-box text-yellow">🏃</div>
+        <div>
+          <div class="w3-bottom">
+            <div class="dot peak"></div>
+            <div class="w3-desc">PEAK</div>
+          </div>
+          <div class="w3-sub">Yesterday · 6.4 km</div>
+        </div>
+      </div>
+
+      <div class="widget w-small bg-black w4">
+        <div class="w4-title">Weekly Mood</div>
+        <div class="w1-fire" style="font-size: 24px; margin-top: 10px;">🔥 47</div>
+        <div class="w4-dots">
+          <div class="mdot c-peak"></div>
+          <div class="mdot c-good"></div>
+          <div class="mdot c-ok"></div>
+          <div class="mdot c-peak"></div>
+          <div class="mdot c-empty"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div>
+    <h2>Medium Widgets (4x2)</h2>
+    <div class="widget-container">
+
+      <div class="widget w-medium bg-white w5">
+        <div class="w5-left">
+          <div>
+            <div class="w1-fire" style="font-size: 16px;">🔥</div>
+            <div class="w1-num" style="font-size: 28px; color: #000;">47</div>
+          </div>
+          <div class="w5-btn">+ LOG</div>
+        </div>
+        <div class="grid-container">
+          <div class="g-cell g-good"></div><div class="g-cell g-peak"></div><div class="g-cell"></div><div class="g-cell g-ok"></div><div class="g-cell g-good"></div><div class="g-cell g-peak"></div><div class="g-cell"></div>
+          <div class="g-cell g-good"></div><div class="g-cell g-peak"></div><div class="g-cell g-bad"></div><div class="g-cell"></div><div class="g-cell g-good"></div><div class="g-cell g-peak"></div><div class="g-cell"></div>
+          <div class="g-cell"></div><div class="g-cell g-good"></div><div class="g-cell g-peak"></div><div class="g-cell g-ok"></div><div class="g-cell g-good"></div><div class="g-cell g-peak"></div><div class="g-cell"></div>
+          <div class="g-cell g-good"></div><div class="g-cell g-peak"></div><div class="g-cell"></div><div class="g-cell g-good"></div><div class="g-cell g-peak"></div><div class="g-cell g-good"></div><div class="g-cell g-today"></div>
+        </div>
+      </div>
+
+      <div class="widget w-medium bg-yellow w6">
+        <div class="w6-top">
+          <div class="streak-pill">
+            <span class="sp-icon">🔥</span>
+            <span class="sp-num">47</span>
+          </div>
+          <div class="w6-sched">Today: Running</div>
+        </div>
+        <div class="w6-card">
+          <div class="w6-card-icon">🏋️</div>
+          <div class="w6-card-info">
+            <div class="w6-card-title">Gym</div>
+            <div class="w6-card-sub">Yesterday</div>
+          </div>
+          <div class="w6-tag">GOOD</div>
+        </div>
+      </div>
+
+      <div class="widget w-medium bg-black w7">
+        <div class="w7-title">THIS WEEK</div>
+        <div class="w7-circles">
+          <div class="t-circle done">✓</div>
+          <div class="t-circle done">✓</div>
+          <div class="t-circle done">✓</div>
+          <div class="t-circle empty"></div>
+          <div class="t-circle empty"></div>
+        </div>
+      </div>
+
+      <div class="widget w-medium">
+        <div class="w8-top">
+          <div>
+            <div class="w8-sub">Scheduled</div>
+            <div class="w8-time">TODAY 18:00</div>
+          </div>
+          <div style="font-size: 32px;">🏃</div>
+        </div>
+        <div class="w8-bottom">
+          <div class="w8-btn">LOG SESSION</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div>
+    <h2>Large Widgets (4x4)</h2>
+    <div class="widget-container">
+
+      <div class="widget w-large bg-white w9">
+        <div class="w9-header">
+          <div class="w9-app">Athlete Diary</div>
+          <div class="streak-pill">
+            <span class="sp-icon">🔥</span>
+            <span class="sp-num">47</span>
+          </div>
+        </div>
+        <div class="macro-grid">
+          <script>
+            const mGrid = document.currentScript.parentElement;
+            const colors = ['g-peak', 'g-good', 'g-ok', 'g-bad', '', '', 'g-good'];
+            for(let i=0; i<84; i++) {
+              let c = document.createElement('div');
+              c.className = 'g-cell ' + colors[Math.floor(Math.random() * colors.length)];
+              if (i === 83) c.className = 'g-cell g-today';
+              mGrid.appendChild(c);
+            }
+          </script>
+        </div>
+      </div>
+
+      <div class="widget w-large">
+        <div class="w10-top">
+          <div class="w10-stat">
+            <div class="w10-stat-val">47</div>
+            <div class="w10-stat-lbl">Day Streak</div>
+          </div>
+          <div class="w10-stat">
+            <div class="w10-stat-val">4</div>
+            <div class="w10-stat-lbl">Sessions</div>
+          </div>
+          <div class="w10-stat">
+            <div class="w10-stat-val">12<span style="font-size: 16px;">km</span></div>
+            <div class="w10-stat-lbl">Distance</div>
+          </div>
+        </div>
+        <div class="w10-bottom">
+          <div class="w6-top" style="margin-bottom: 12px;">
+            <div class="w3-title" style="color: #bbb;">Last Session</div>
+            <div class="w6-tag" style="background: #000; color: #FFE500;">PEAK</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="w6-card-icon" style="width: 28px; height: 28px; font-size: 14px;">🏃</div>
+            <div class="w6-card-title" style="font-size: 14px;">Running</div>
+          </div>
+          <div class="w10-note-box">
+            <div class="w10-note-text">"Felt incredibly strong today. Pushed the pace on the last 2km. The weather was perfect."</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
