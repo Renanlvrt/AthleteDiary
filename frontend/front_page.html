@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Athlete Diary - Immersive UI</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    background: #111;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+  
+  .phone {
+    width: 340px;
+    height: 720px;
+    /* Immersive background image with a dark gradient overlay */
+    background-image: 
+      linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,1) 100%),
+      url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=800&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center top;
+    border-radius: 40px;
+    border: 4px solid #333;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 32px 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  }
+
+  /* Floating Header */
+  .header-lbl {
+    position: absolute;
+    top: 32px;
+    left: 24px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #FFE500;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  }
+
+  .content-wrapper {
+    position: relative;
+    z-index: 10;
+  }
+
+  .hero-title {
+    font-size: 52px;
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 0.9;
+    letter-spacing: -1.5px;
+    margin-bottom: 16px;
+  }
+
+  .hero-title span {
+    color: #FFE500;
+  }
+
+  .sub-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: #ccc;
+    line-height: 1.5;
+    margin-bottom: 32px;
+  }
+
+  /* Frosted Glass Sport Icons */
+  .icon-row {
+    display: flex;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .glass-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 20px;
+  }
+
+  /* Primary Action Button */
+  .btn {
+    background: #FFE500;
+    border-radius: 100px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 20px rgba(255, 229, 0, 0.3);
+  }
+
+  .btn span {
+    font-size: 14px;
+    font-weight: 900;
+    color: #000;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  
+  .btn svg {
+    width: 18px;
+    height: 18px;
+    stroke: #000;
+    stroke-width: 3;
+    fill: none;
+  }
+
+  .btn-sub {
+    text-align: center;
+    font-size: 10px;
+    color: #888;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+  <div class="phone">
+    <div class="header-lbl">Athlete Diary</div>
+    
+    <div class="content-wrapper">
+      <div class="hero-title">
+        Your<br>
+        <span>Training</span><br>
+        Diary.
+      </div>
+      
+      <div class="sub-text">
+        Log every session.<br>
+        Track your mood.<br>
+        See how you grow.
+      </div>
+
+      <div class="icon-row">
+        <div class="glass-icon">🏃</div>
+        <div class="glass-icon">🏋️</div>
+        <div class="glass-icon">🚴</div>
+        <div class="glass-icon">+</div>
+      </div>
+
+      <div class="btn">
+        <span>Get Started</span>
+        <svg viewBox="0 0 24 24" stroke-linecap="square" stroke-linejoin="miter">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+      <div class="btn-sub">Takes about 45 seconds</div>
+    </div>
+  </div>
+
+</body>
+</html>

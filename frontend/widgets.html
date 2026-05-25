@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Athlete Diary - iOS Widgets</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    background: #e0e0e0; /* Simulated iOS home screen background */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 40px 20px;
+  }
+  
+  /* Widget Shared Styles */
+  .widget {
+    background: #fff;
+    border-radius: 22px; /* iOS standard widget radius */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* SMALL WIDGET (2x2) */
+  .widget-small {
+    width: 160px;
+    height: 160px;
+    background: #FFE500;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 18px;
+  }
+  
+  .sm-streak-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sm-fire {
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+  
+  .sm-num {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #000;
+    line-height: 1;
+  }
+  
+  .sm-lbl {
+    font-size: 10px;
+    font-weight: 800;
+    color: #000;
+    opacity: 0.5;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  
+  .sm-log-btn {
+    background: #000;
+    color: #FFE500;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* MEDIUM WIDGET (4x2) */
+  .widget-medium {
+    width: 340px;
+    height: 160px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 18px;
+  }
+  
+  .md-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .md-streak-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #000;
+    border-radius: 100px;
+    padding: 5px 12px;
+  }
+  
+  .md-streak-num {
+    font-size: 14px;
+    font-weight: 900;
+    color: #FFE500;
+    letter-spacing: -0.5px;
+  }
+  
+  .md-streak-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: #888;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  
+  .md-mood-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .md-mood-text {
+    font-size: 9px;
+    font-weight: 800;
+    color: #bbb;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .md-mood-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #22C55E; /* Great */
+  }
+  
+  .md-section-lbl {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #bbb;
+    margin-bottom: 8px;
+  }
+  
+  .md-card {
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+  
+  .md-card-ico {
+    font-size: 22px;
+    background: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .md-card-info {
+    flex: 1;
+  }
+  
+  .md-card-name {
+    font-size: 14px;
+    font-weight: 900;
+    color: #000;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .md-card-meta {
+    font-size: 11px;
+    color: #888;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  
+  .md-card-perf {
+    font-size: 10px;
+    font-weight: 800;
+    color: #22C55E;
+    letter-spacing: 1px;
+    background: rgba(34, 197, 94, 0.15);
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+
+  /* Presentation Labels */
+  .label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+</style>
+</head>
+<body>
+
+  <div>
+    <div class="label">Small Widget (2x2)</div>
+    <div class="widget widget-small">
+      <div class="sm-streak-wrap">
+        <div class="sm-fire">🔥</div>
+        <div class="sm-num">47</div>
+        <div class="sm-lbl">Day Streak</div>
+      </div>
+      <div class="sm-log-btn">+ Log Session</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="label">Medium Widget (4x2)</div>
+    <div class="widget widget-medium">
+      <div class="md-header">
+        <div class="md-streak-pill">
+          <span style="font-size:14px;">🔥</span>
+          <span class="md-streak-num">47</span>
+          <span class="md-streak-label">Day Streak</span>
+        </div>
+        <div class="md-mood-indicator">
+          <span class="md-mood-text">Today's Mood</span>
+          <span class="md-mood-dot"></span>
+        </div>
+      </div>
+      
+      <div class="md-section-lbl">Last Session</div>
+      
+      <div class="md-card">
+        <div class="md-card-ico">🏃</div>
+        <div class="md-card-info">
+          <div class="md-card-name">Running</div>
+          <div class="md-card-meta">Today · 6.4 km</div>
+        </div>
+        <div class="md-card-perf">PEAK</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

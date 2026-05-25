@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Athlete Diary - All Set</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'SF Pro Display', sans-serif;
+    background: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+  
+  .phone {
+    width: 340px;
+    height: 720px;
+    background: #FAFAFA;
+    border-radius: 40px;
+    border: 4px solid #111;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  }
+
+  /* YELLOW HERO SECTION */
+  .hero-block {
+    background: #FFE500;
+    padding: 40px 24px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* The Watermark trick to add depth without clutter */
+  .watermark {
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    font-size: 160px;
+    opacity: 0.08;
+    line-height: 1;
+    transform: rotate(10deg);
+    pointer-events: none;
+  }
+
+  .step-lbl {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.5);
+    margin-bottom: 16px;
+  }
+
+  .headline {
+    font-size: 54px;
+    font-weight: 900;
+    color: #000;
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: -2px;
+    margin-bottom: 12px;
+  }
+
+  .sub-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0,0,0,0.7);
+  }
+
+  /* BENTO BOX GRID SECTION */
+  .content-block {
+    flex: 1;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .section-title {
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #AAA;
+    margin-bottom: 16px;
+  }
+
+  .bento-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: auto; /* Pushes the button to the bottom */
+  }
+
+  /* Standard Bento Card */
+  .bento-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid rgba(0,0,0,0.02);
+  }
+
+  /* Full Width Bento Card */
+  .bento-card.full {
+    grid-column: span 2;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Inactive/Empty Card State */
+  .bento-card.inactive {
+    background: transparent;
+    border: 2px dashed #E5E5E5;
+    box-shadow: none;
+    opacity: 0.6;
+  }
+
+  .icon-circle {
+    width: 36px;
+    height: 36px;
+    background: #FFE500;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  
+  .inactive .icon-circle {
+    background: #EEEEEE;
+    filter: grayscale(100%);
+  }
+
+  .card-label {
+    font-size: 12px;
+    font-weight: 800;
+    color: #000;
+  }
+
+  .card-value {
+    font-size: 10px;
+    font-weight: 600;
+    color: #888;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* CTA BUTTON */
+  .btn {
+    background: #000;
+    border-radius: 100px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+  }
+
+  .btn span {
+    font-size: 14px;
+    font-weight: 900;
+    color: #FFE500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  
+  .btn svg {
+    width: 18px;
+    height: 18px;
+    stroke: #FFE500;
+    stroke-width: 3;
+    fill: none;
+  }
+</style>
+</head>
+<body>
+
+  <div class="phone">
+    <div class="hero-block">
+      <div class="watermark">✅</div>
+      <div class="step-lbl">All Done</div>
+      <div class="headline">
+        YOU'RE<br>ALL SET.
+      </div>
+      <div class="sub-text">Time to start logging your sessions.</div>
+    </div>
+
+    <div class="content-block">
+      <div class="section-title">What's Ready</div>
+      
+      <div class="bento-grid">
+        <div class="bento-card">
+          <div class="icon-circle">🏃</div>
+          <div>
+            <div class="card-label">Sports</div>
+            <div class="card-value">Running</div>
+          </div>
+        </div>
+
+        <div class="bento-card">
+          <div class="icon-circle">🎯</div>
+          <div>
+            <div class="card-label">Goal</div>
+            <div class="card-value">Consistency</div>
+          </div>
+        </div>
+
+        <div class="bento-card full">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="icon-circle">📅</div>
+            <div>
+              <div class="card-label">Schedule</div>
+              <div class="card-value">Set up later</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-card full inactive">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="icon-circle">🔥</div>
+            <div>
+              <div class="card-label">Streak</div>
+              <div class="card-value">Log today to start</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn">
+        <span>Start Logging</span>
+        <svg viewBox="0 0 24 24" stroke-linecap="square" stroke-linejoin="miter">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

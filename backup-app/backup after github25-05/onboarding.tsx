@@ -288,8 +288,6 @@ export default function OnboardingScreen() {
     <View style={styles.container}>
       <FlatList
         ref={flatListRef}
-        style={{ flex: 1 }}
-        contentContainerStyle={{ flexGrow: 1 }}
         data={screens}
         renderItem={({ item }) => (
           <View style={{ width: screenWidth, height: '100%' }}>{item}</View>
@@ -305,6 +303,21 @@ export default function OnboardingScreen() {
           index,
         })}
       />
+
+      {/* Dot indicators (only steps 1-4, not the final screen) */}
+      {currentStep < 4 && (
+        <View style={[styles.dotsRow, { bottom: insets.bottom + 24 }]}>
+          {[0, 1, 2, 3].map((i) => (
+            <View
+              key={i}
+              style={[
+                styles.dot,
+                i === currentStep && styles.dotActive,
+              ]}
+            />
+          ))}
+        </View>
+      )}
     </View>
   );
 }
@@ -313,19 +326,19 @@ export default function OnboardingScreen() {
 
 function Screen1Welcome({ insets, width, onNext, btnAnimStyle, pressIn, pressOut }: any) {
   return (
-    <View style={[s1.screenWrapper, { width }]}>
+    <LinearGradient colors={['#021021', '#000000']} style={[s1.screenWrapper, { width }]}>
       {/* Absolute, scaled background image decoupled from content */}
       {/* Replace the Image component with this exact code */}
       <Image
-        source={require('../frontend/image_first_page.avif')}
-        style={[StyleSheet.absoluteFillObject, { transform: [{ scale: 1.00 }, { translateY: -15 }, { translateX: 0 }] }]} 
+        source={{ uri: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=800&auto=format&fit=crop' }}
+        style={[StyleSheet.absoluteFillObject, { transform: [{ scale: 1.00 }, { translateY: -30 }, { translateX: 0 }] }]} 
         resizeMode="cover"
       />
       
       {/* Dark gradient overlay — transparent top → pitch black bottom */}
       <LinearGradient
         colors={['transparent', 'rgba(0, 0, 0, 0.8)', '#000000']}
-        style={[StyleSheet.absoluteFillObject, { transform: [{ translateY: 92 }] }]}
+        style={[StyleSheet.absoluteFillObject, { transform: [{ translateY: 104 }] }]}
       />
 
       <SafeAreaView style={s1.contentContainer}>
@@ -383,7 +396,7 @@ function Screen1Welcome({ insets, width, onNext, btnAnimStyle, pressIn, pressOut
           <Text style={s1.btnSub}>TAKES ABOUT 45 SECONDS</Text>
         </View>
       </SafeAreaView>
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -408,7 +421,7 @@ const s1 = StyleSheet.create({
   },
   bottomContent: {
     paddingHorizontal: 24,
-    marginTop: 212,
+    marginTop: 178,
   },
   heroTitle: {
     fontSize: 64,
@@ -553,7 +566,7 @@ function Screen2Sports({ insets, width, selectedSports, onToggle, onNext, onBack
 }
 
 const s2 = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#F0F0F0' },
+  root: { flex: 1, backgroundColor: COLORS.primary },
   header: {
     backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.md,
@@ -606,8 +619,8 @@ const s2 = StyleSheet.create({
     position: 'relative',
   },
   sportTileActive: {
-    backgroundColor: COLORS.primary,
-    borderColor: COLORS.black,
+    backgroundColor: COLORS.black,
+    borderColor: COLORS.primary,
   },
   sportEmoji: { fontSize: 28, marginBottom: 6 },
   sportLabel: {
@@ -617,36 +630,31 @@ const s2 = StyleSheet.create({
     color: '#333333',
     textTransform: 'uppercase',
   },
-  sportLabelActive: { color: COLORS.black },
+  sportLabelActive: { color: COLORS.primary },
   checkBadge: {
     position: 'absolute',
     top: 10,
     right: 10,
     width: 20,
     height: 20,
-    backgroundColor: COLORS.black,
+    backgroundColor: COLORS.primary,
     borderRadius: RADIUS.full,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  footer: { paddingHorizontal: SPACING.md, paddingTop: SPACING.sm},
+  footer: { paddingHorizontal: SPACING.md, paddingTop: SPACING.sm },
   ctaButton: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.black,
     borderRadius: RADIUS.full,
     height: 56,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 4,
   },
   ctaDisabled: { opacity: 0.4 },
   ctaText: {
     fontSize: 11,
     fontWeight: '900',
-    color: COLORS.black,
+    color: COLORS.primary,
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
@@ -656,7 +664,7 @@ const s2 = StyleSheet.create({
 
 function Screen3Goal({ insets, width, selectedGoal, onSelect, onNext, onBack, btnAnimStyle, pressIn, pressOut }: any) {
   return (
-    <View style={[s3.root, { width, paddingBottom: insets.bottom + 150 }]}>
+    <View style={[s3.root, { width, paddingBottom: insets.bottom + 80 }]}>
       {/* Yellow header */}
       <View style={[s3.header, { paddingTop: insets.top + 12 }]}>
         <Pressable onPress={onBack} style={s3.backBtn} accessibilityLabel="Go back">
@@ -722,7 +730,7 @@ function Screen3Goal({ insets, width, selectedGoal, onSelect, onNext, onBack, bt
 }
 
 const s3 = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#F0F0F0' },
+  root: { flex: 1, backgroundColor: COLORS.primary },
   header: {
     backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.md,
@@ -770,8 +778,8 @@ const s3 = StyleSheet.create({
     borderColor: 'transparent',
   },
   goalCardActive: {
-    backgroundColor: COLORS.primary,
-    borderColor: COLORS.black,
+    backgroundColor: COLORS.black,
+    borderColor: COLORS.primary,
   },
   goalIcon: { fontSize: 28, width: 40, textAlign: 'center' },
   goalText: { flex: 1 },
@@ -782,14 +790,14 @@ const s3 = StyleSheet.create({
     color: '#111111',
     textTransform: 'uppercase',
   },
-  goalLabelActive: { color: COLORS.black },
+  goalLabelActive: { color: COLORS.primary },
   goalSub: {
     fontSize: 11,
     color: '#888888',
     marginTop: 2,
     lineHeight: 15,
   },
-  goalSubActive: { color: '#444444' },
+  goalSubActive: { color: '#999999' },
   radioInactive: {
     width: 20,
     height: 20,
@@ -802,7 +810,7 @@ const s3 = StyleSheet.create({
     height: 20,
     borderRadius: RADIUS.full,
     borderWidth: 2,
-    borderColor: COLORS.black,
+    borderColor: COLORS.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -810,26 +818,21 @@ const s3 = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: RADIUS.full,
-    backgroundColor: COLORS.black,
-  },
-  footer: { paddingHorizontal: SPACING.md, paddingTop: SPACING.sm, marginTop: 85 },
-  ctaButton: {
     backgroundColor: COLORS.primary,
+  },
+  footer: { paddingHorizontal: SPACING.md, paddingTop: SPACING.sm },
+  ctaButton: {
+    backgroundColor: COLORS.black,
     borderRadius: RADIUS.full,
     height: 56,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 4,
   },
   ctaDisabled: { opacity: 0.4 },
   ctaText: {
     fontSize: 11,
     fontWeight: '900',
-    color: COLORS.black,
+    color: COLORS.primary,
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
@@ -879,7 +882,7 @@ function Screen4Schedule({ insets, width, slots, onUpdateSlot, onSave, onSkip, o
         </View>
 
         {/* Actions */}
-        <View style={[s4.actions, { paddingBottom: insets.bottom + 20 }]}> 
+        <View style={s4.actions}>
           <Pressable
             style={[s4.saveButton, saving && s4.saveDisabled]}
             onPress={onSave}
@@ -907,7 +910,7 @@ function Screen4Schedule({ insets, width, slots, onUpdateSlot, onSave, onSkip, o
 }
 
 const s4 = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#F0F0F0' },
+  root: { flex: 1, backgroundColor: COLORS.primary },
   header: {
     backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.md,
@@ -958,22 +961,17 @@ const s4 = StyleSheet.create({
   },
   actions: { padding: SPACING.md, gap: 12 },
   saveButton: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.black,
     borderRadius: RADIUS.full,
     height: 56,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 4,
   },
   saveDisabled: { opacity: 0.5 },
   saveText: {
     fontSize: 11,
     fontWeight: '900',
-    color: COLORS.black,
+    color: COLORS.primary,
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
@@ -995,79 +993,72 @@ function Screen5AllSet({ insets, width, selectedSports, selectedGoal, hasSchedul
   const goalInfo = GOALS.find((g) => g.key === selectedGoal);
 
   return (
-    <View style={[s5.root, { width, height: '100%' }]}>
-      <View style={[s5.heroBlock, { paddingTop: insets.top + 40 }]}>
-        <Text style={s5.watermark} numberOfLines={1}>✅</Text>
-        <Text style={s5.stepLbl}>All Done</Text>
-        <Text style={s5.headline}>{'YOU\'RE\nALL SET.'}</Text>
-        <Text style={s5.subText}>Time to start logging your sessions.</Text>
-      </View>
-      
-      <View style={s5.contentBlock}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          bounces={false}
-          style={{ flex: 1 }}
-          contentContainerStyle={{ paddingBottom: 24, flexGrow: 1 }}
-        >
-          <Text style={s5.sectionTitle}>What's Ready</Text>
-          
-          <View style={s5.bentoGrid}>
-            {/* Row 1: Sports & Goal */}
-            <View style={s5.row}>
-              <View style={[s5.bentoCard, s5.bentoCardHalf]}>
-                <View style={s5.iconCircle}><Text style={s5.iconTxt}>🏃</Text></View>
-                <View style={s5.cardTextGroup}>
-                  <Text style={s5.cardLabel}>Sports</Text>
-                  <Text style={s5.cardValue}>
-                    {selectedSports.length > 0 
-                      ? selectedSports.map((s: SportType) => SPORT_FULL_NAMES[s]).join(', ')
-                      : 'Not set'}
-                  </Text>
-                </View>
-              </View>
+    <View style={[s5.root, { width, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 24 }]}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingBottom: 16 }}
+      >
+        {/* Hero */}
+        <View style={s5.heroBlock}>
+          <Text style={s5.checkEmoji}>✅</Text>
+          <Text style={s5.headline}>{'ALL\nSET!'}</Text>
+          <Text style={s5.sub}>Here's your setup</Text>
+        </View>
 
-              <View style={[s5.bentoCard, s5.bentoCardHalf]}>
-                <View style={s5.iconCircle}><Text style={s5.iconTxt}>🎯</Text></View>
-                <View style={s5.cardTextGroup}>
-                  <Text style={s5.cardLabel}>Goal</Text>
-                  <Text style={s5.cardValue}>{goalInfo ? goalInfo.label : 'Not set'}</Text>
-                </View>
-              </View>
-            </View>
-
-            {/* Row 2: Schedule (Full Width) */}
-            <View style={[s5.bentoCard, s5.bentoCardFull]}>
-              <View style={s5.iconCircle}><Text style={s5.iconTxt}>📅</Text></View>
-              <View style={s5.cardTextGroup}>
-                <Text style={s5.cardLabel}>Schedule</Text>
-                <Text style={s5.cardValue}>{hasSchedule ? 'Reminders on' : 'Set up later'}</Text>
-              </View>
-            </View>
-
-            {/* Row 3: Streak (Full Width Inactive) */}
-            <View style={[s5.bentoCard, s5.bentoCardFull, s5.bentoInactive]}>
-              <View style={[s5.iconCircle, s5.iconInactive]}><Text style={s5.iconTxt}>🔥</Text></View>
-              <View style={s5.cardTextGroup}>
-                <Text style={s5.cardLabel}>Streak</Text>
-                <Text style={s5.cardValue}>Log today to start</Text>
-              </View>
+        {/* Summary cards */}
+        <View style={s5.summaryBlock}>
+          {/* Sports */}
+          <View style={s5.summaryCard}>
+            <Text style={s5.summaryLabel}>YOUR SPORTS</Text>
+            <View style={s5.sportPills}>
+              {selectedSports.length > 0
+                ? selectedSports.map((sport: SportType) => (
+                    <View key={sport} style={s5.pill}>
+                      <Text style={s5.pillText}>
+                        {SPORT_ICONS[sport]} {SPORT_FULL_NAMES[sport].toUpperCase()}
+                      </Text>
+                    </View>
+                  ))
+                : <Text style={s5.summaryValue}>Not set</Text>
+              }
             </View>
           </View>
-        </ScrollView>
 
-        <Animated.View style={[btnAnimStyle, { paddingBottom: insets.bottom > 0 ? insets.bottom : 24 }]}>
-          <Pressable
-            style={s5.btn}
-            onPress={onStart}
-            onPressIn={pressIn}
-            onPressOut={pressOut}
-          >
-            <Text style={s5.btnText}>START LOGGING</Text>
-            <Ionicons name="arrow-forward" size={18} color={COLORS.primary} style={{ marginLeft: 8 }} />
-          </Pressable>
-        </Animated.View>
-      </View>
+          {/* Goal */}
+          <View style={s5.summaryCard}>
+            <Text style={s5.summaryLabel}>YOUR GOAL</Text>
+            <Text style={s5.summaryValue}>
+              {goalInfo ? `${goalInfo.icon} ${goalInfo.label}` : 'Not set'}
+            </Text>
+          </View>
+
+          {/* Schedule */}
+          <View style={s5.summaryCard}>
+            <Text style={s5.summaryLabel}>TRAINING SCHEDULE</Text>
+            <Text style={s5.summaryValue}>
+              {hasSchedule ? '✅ Configured' : '⏭ Set up later'}
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* CTA */}
+      <Animated.View style={[btnAnimStyle, { marginTop: SPACING.md }]}>
+        <Pressable
+          style={s5.ctaButton}
+          onPress={onStart}
+          onPressIn={pressIn}
+          onPressOut={pressOut}
+          accessible={true}
+          accessibilityLabel="Start using Athlete Diary"
+          accessibilityRole="button"
+        >
+          <Text style={s5.ctaText}>START TRAINING DIARY</Text>
+          <Ionicons name="arrow-forward" size={16} color={COLORS.primary} />
+        </Pressable>
+      </Animated.View>
     </View>
   );
 }
@@ -1075,145 +1066,79 @@ function Screen5AllSet({ insets, width, selectedSports, selectedGoal, hasSchedul
 const s5 = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#FAFAFA',
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: SPACING.md,
   },
   heroBlock: {
-    backgroundColor: COLORS.primary,
-    paddingHorizontal: 24,
-    paddingBottom: 32,
-    position: 'relative',
-    overflow: 'hidden',
+    paddingVertical: SPACING.lg,
   },
-  watermark: {
-    position: 'absolute',
-    right: -20,
-    top: -20,
-    fontSize: 160,
-    opacity: 0.08,
-    lineHeight: 160,
-    transform: [{ rotate: '10deg' }],
-  },
-  stepLbl: {
-    fontSize: 10,
-    fontWeight: '800',
-    letterSpacing: 3,
-    textTransform: 'uppercase',
-    color: 'rgba(0,0,0,0.5)',
-    marginBottom: 16,
-  },
+  checkEmoji: { fontSize: 48, marginBottom: 12 },
   headline: {
-    fontSize: 54,
+    fontSize: 64,
     fontWeight: '900',
-    color: '#000',
-    textTransform: 'uppercase',
-    lineHeight: 52,
+    color: COLORS.textOnYellow,
     letterSpacing: -2,
-    marginBottom: 12,
-  },
-  subText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: 'rgba(0,0,0,0.7)',
-  },
-  contentBlock: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 24,
-  },
-  sectionTitle: {
-    fontSize: 10,
-    fontWeight: '900',
-    letterSpacing: 3,
+    lineHeight: 62,
     textTransform: 'uppercase',
-    color: '#AAA',
-    marginBottom: 16,
   },
-  bentoGrid: {
-    flexDirection: 'column',
-    gap: 12,
-  },
-  row: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  bentoCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.04,
-    shadowRadius: 12,
-    elevation: 2,
-    flexDirection: 'column',
-    gap: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.02)',
-  },
-  bentoCardHalf: {
-    flex: 1,
-  },
-  bentoCardFull: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  bentoInactive: {
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: '#E5E5E5',
-    borderStyle: 'dashed',
-    shadowOpacity: 0,
-    elevation: 0,
+  sub: {
+    fontSize: 14,
+    color: COLORS.textOnYellow,
     opacity: 0.6,
+    marginTop: 8,
+    fontWeight: '500',
   },
-  iconCircle: {
-    width: 36,
-    height: 36,
-    backgroundColor: COLORS.primary,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
+  summaryBlock: { gap: 10 },
+  summaryCard: {
+    backgroundColor: COLORS.black,
+    borderRadius: RADIUS.lg,
+    padding: SPACING.md,
+    gap: 6,
   },
-  iconInactive: {
-    backgroundColor: '#EEEEEE',
-  },
-  iconTxt: {
-    fontSize: 16,
-  },
-  cardTextGroup: {
-    flexDirection: 'column',
-  },
-  cardLabel: {
-    fontSize: 12,
+  summaryLabel: {
+    fontSize: 9,
     fontWeight: '800',
-    color: '#000',
-  },
-  cardValue: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: '#888',
-    marginTop: 4,
+    letterSpacing: 2,
+    color: '#666666',
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
-  btn: {
-    backgroundColor: '#000',
-    borderRadius: 100,
-    paddingVertical: 20,
+  summaryValue: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: COLORS.primary,
+  },
+  sportPills: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+  },
+  pill: {
+    backgroundColor: '#1A1A1A',
+    borderRadius: RADIUS.full,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+  },
+  pillText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: COLORS.primary,
+    letterSpacing: 1,
+  },
+  spacer: { flex: 1 },
+  ctaButton: {
+    backgroundColor: COLORS.black,
+    borderRadius: RADIUS.full,
+    height: 56,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.15,
-    shadowRadius: 24,
-    elevation: 8,
+    gap: 10,
   },
-  btnText: {
-    fontSize: 14,
+  ctaText: {
+    fontSize: 12,
     fontWeight: '900',
     color: COLORS.primary,
-    letterSpacing: 3,
+    letterSpacing: 2,
     textTransform: 'uppercase',
   },
 });
@@ -1223,6 +1148,24 @@ const s5 = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.primary,
+  },
+  dotsRow: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', // Visibile against black
+  },
+  dotActive: {
+    width: 20,
+    backgroundColor: '#FFE500', // Yellow active dot
   },
 });

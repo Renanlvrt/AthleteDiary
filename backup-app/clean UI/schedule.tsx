@@ -9,7 +9,6 @@ import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -80,16 +79,14 @@ export default function ScheduleScreen() {
 
     setSaving(true);
 
-    if (Platform.OS !== 'web') {
-      const granted = await requestNotificationPermissions();
-      if (!granted) {
-        Alert.alert(
-          'Notifications needed',
-          'Please enable notifications in Settings to get training reminders.',
-        );
-        setSaving(false);
-        return;
-      }
+    const granted = await requestNotificationPermissions();
+    if (!granted) {
+      Alert.alert(
+        'Notifications needed',
+        'Please enable notifications in Settings to get training reminders.',
+      );
+      setSaving(false);
+      return;
     }
 
     const trainingSlots: TrainingSlot[] = enabled.map((s) => ({
@@ -105,16 +102,9 @@ export default function ScheduleScreen() {
       updatedAt: Date.now(),
     });
 
-    if (Platform.OS !== 'web') {
-      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    }
+    void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setSaving(false);
-    
-    if (router.canGoBack()) {
-      router.back();
-    } else {
-      router.replace('/');
-    }
+    router.back();
   }
 
   return (
@@ -125,10 +115,7 @@ export default function ScheduleScreen() {
         <View style={styles.yellowBlock}>
           <Pressable
             style={styles.backButton}
-            onPress={() => {
-              if (router.canGoBack()) router.back();
-              else router.replace('/');
-            }}
+            onPress={() => router.back()}
             accessible={true}
             accessibilityLabel="Go back"
           >
@@ -181,78 +168,71 @@ export default function ScheduleScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: COLORS.background,
   },
   yellowBlock: {
     backgroundColor: COLORS.primary,
     padding: SPACING.md,
-    paddingBottom: SPACING.lg,
+    paddingBottom: 24,
   },
   backButton: {
     minHeight: 44,
     justifyContent: 'center',
     alignSelf: 'flex-start',
-    marginBottom: 4,
+    marginBottom: SPACING.sm,
   },
   backChevron: {
-    fontSize: 22,
+    fontSize: 20,
     color: COLORS.textOnYellow,
   },
   headline: {
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: '900',
     color: COLORS.textOnYellow,
-    letterSpacing: -1.5,
-    lineHeight: 40,
+    letterSpacing: -1,
+    lineHeight: 30,
     textTransform: 'uppercase',
-    marginBottom: 6,
+    marginBottom: SPACING.sm,
   },
   sub: {
-    fontSize: 12,
-    fontWeight: '500',
+    fontSize: 11,
+    fontWeight: '600',
     color: COLORS.textOnYellow,
-    opacity: 0.6,
-    lineHeight: 18,
+    opacity: 0.5,
+    lineHeight: 16,
   },
   daysBlock: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.surface,
     marginTop: SPACING.sm,
   },
   rowDivider: {
     height: 1,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: COLORS.surfaceAlt,
     marginHorizontal: SPACING.md,
   },
   saveBlock: {
     padding: SPACING.md,
     paddingTop: SPACING.lg,
-    paddingBottom: 40,
   },
   saveButton: {
     backgroundColor: COLORS.primary,
-    borderRadius: RADIUS.full,
-    height: 56,
+    borderRadius: RADIUS.lg,
+    paddingVertical: 16,
     alignItems: 'center',
+    minHeight: 52,
     justifyContent: 'center',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 4,
   },
   saveButtonDisabled: {
-    opacity: 0.5,
+    opacity: 0.6,
   },
   saveButtonText: {
-    fontSize: 11,
-    fontWeight: '900',
-    color: '#000000',
-    letterSpacing: 2,
-    textTransform: 'uppercase',
+    ...TYPOGRAPHY.appName,
+    color: COLORS.textOnYellow,
+    fontSize: 13,
   },
   hint: {
-    fontSize: 11,
-    color: '#888888',
+    fontSize: 10,
+    color: COLORS.textSecondary,
     textAlign: 'center',
     marginTop: SPACING.md,
     letterSpacing: 0.5,

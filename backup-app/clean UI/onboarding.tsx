@@ -317,7 +317,7 @@ function Screen1Welcome({ insets, width, onNext, btnAnimStyle, pressIn, pressOut
       {/* Absolute, scaled background image decoupled from content */}
       {/* Replace the Image component with this exact code */}
       <Image
-        source={require('../frontend/image_first_page.avif')}
+        source={{ uri: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=800&auto=format&fit=crop' }}
         style={[StyleSheet.absoluteFillObject, { transform: [{ scale: 1.00 }, { translateY: -15 }, { translateX: 0 }] }]} 
         resizeMode="cover"
       />
