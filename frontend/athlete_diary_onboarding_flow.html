@@ -1,0 +1,219 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'SF Pro Display',sans-serif;background:#e8e8e8;}
+.outer{display:flex;flex-direction:column;align-items:center;padding:20px 16px 32px;}
+.screen-lbl{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:8px;text-align:center;}
+.phone{width:310px;background:#fff;border-radius:38px;overflow:hidden;border:3px solid #1a1a1a;min-height:540px;}
+.notch-bar{height:30px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;}
+.notch-pill{width:80px;height:18px;background:#1a1a1a;border-radius:9px;}
+.screen{display:none;flex-direction:column;height:100%;}
+.screen.active{display:flex;}
+
+.yblock{background:#FFE500;padding:18px 20px 22px;flex-shrink:0;}
+.rblock{background:#E5232A;padding:18px 20px;flex-shrink:0;}
+.wblock{background:#fff;padding:18px 20px;flex:1;}
+.caption{font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(0,0,0,0.35);margin-bottom:6px;}
+.caption-w{font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#bbb;margin-bottom:10px;}
+.hero{font-size:38px;font-weight:900;text-transform:uppercase;letter-spacing:-1.5px;color:#000;line-height:1.0;}
+.sub{font-size:12px;color:rgba(0,0,0,0.45);font-weight:500;margin-top:6px;}
+.hero-w{font-size:28px;font-weight:900;text-transform:uppercase;letter-spacing:-1px;color:#fff;line-height:1.05;}
+
+.progress{display:flex;gap:5px;padding:14px 20px 0;}
+.pdot{height:4px;border-radius:2px;flex:1;background:#e0e0e0;}
+.pdot.done{background:#FFE500;}
+.pdot.active{background:#000;}
+
+.btn-black{background:#000;border-radius:12px;padding:14px 20px;text-align:center;cursor:pointer;margin:0 20px 20px;}
+.btn-black span{font-size:11px;font-weight:900;color:#FFE500;letter-spacing:3px;text-transform:uppercase;}
+.btn-red{background:#E5232A;border-radius:12px;padding:14px 20px;text-align:center;cursor:pointer;margin:0 20px 14px;}
+.btn-red span{font-size:11px;font-weight:900;color:#fff;letter-spacing:3px;text-transform:uppercase;}
+.skip{text-align:center;padding:0 20px 20px;cursor:pointer;}
+.skip span{font-size:11px;color:#bbb;font-weight:600;letter-spacing:1px;text-decoration:underline;}
+
+.sports-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.sport-tile{background:#f5f5f5;border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;border:2px solid transparent;}
+.sport-tile.sel{background:#FFE500;border-color:#000;}
+.sport-tile .se{font-size:22px;margin-bottom:4px;}
+.sport-tile .sn{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#000;}
+
+.goal-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.goal-tile{background:#f5f5f5;border-radius:12px;padding:14px 16px;cursor:pointer;border:2px solid transparent;display:flex;align-items:center;gap:12px;}
+.goal-tile.sel{background:#fff;border-color:#000;}
+.goal-tile.sel .gcheck{background:#000;color:#FFE500;}
+.gcheck{width:22px;height:22px;border-radius:50%;border:2px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:transparent;flex-shrink:0;}
+.gtitle{font-size:12px;font-weight:800;color:#000;text-transform:uppercase;letter-spacing:1px;}
+.gsub{font-size:10px;color:#aaa;margin-top:2px;}
+
+.day-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f0f0f0;}
+.day-lbl{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#000;width:30px;}
+.toggle{width:36px;height:20px;background:#e0e0e0;border-radius:10px;cursor:pointer;position:relative;flex-shrink:0;}
+.toggle.on{background:#FFE500;}
+.tknob{width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:left 0.15s;border:1px solid rgba(0,0,0,0.1);}
+.toggle.on .tknob{left:18px;}
+.time-pill{font-size:10px;font-weight:800;color:#000;background:#f0f0f0;border-radius:100px;padding:4px 10px;margin-left:auto;}
+.toggle.on+.time-pill,.time-pill.show{background:#000;color:#FFE500;}
+
+.done-list{display:flex;flex-direction:column;gap:8px;margin:16px 0;}
+.done-row{display:flex;align-items:center;gap:10px;}
+.done-ico{width:28px;height:28px;background:#FFE500;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.done-txt{font-size:12px;font-weight:700;color:#000;}
+.done-sub{font-size:10px;color:#aaa;margin-top:1px;}
+</style>
+
+<div class="outer">
+<div class="screen-lbl" id="toplbl">Step 1 of 5 — Welcome</div>
+<div class="phone">
+  <div class="notch-bar" id="notchbar"><div class="notch-pill"></div></div>
+
+  <div class="screen active" id="s1">
+    <div style="background:#FFE500;flex:1;display:flex;flex-direction:column;padding:28px 22px 24px;">
+      <div style="font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(0,0,0,0.35);margin-bottom:20px;">Athlete Diary</div>
+      <div style="flex:1;">
+        <div style="font-size:52px;font-weight:900;letter-spacing:-2px;color:#000;line-height:0.95;text-transform:uppercase;">YOUR<br>TRAINING<br>DIARY.</div>
+        <div style="font-size:13px;color:rgba(0,0,0,0.45);font-weight:500;margin-top:14px;line-height:1.5;">Log every session. Track your mood.<br>See how you grow over time.</div>
+      </div>
+      <div style="background:#000;border-radius:14px;padding:16px;text-align:center;cursor:pointer;" onclick="go(2)">
+        <span style="font-size:12px;font-weight:900;color:#FFE500;letter-spacing:3px;text-transform:uppercase;">Get Started →</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="s2">
+    <div id="prog2" class="progress"></div>
+    <div class="yblock" style="padding-top:14px;">
+      <div class="caption">Step 1 of 4</div>
+      <div class="hero" style="font-size:32px;">WHAT DO<br>YOU DO?</div>
+      <div class="sub">Pick all that apply</div>
+    </div>
+    <div class="wblock" style="padding-top:16px;">
+      <div class="sports-grid">
+        <div class="sport-tile sel" onclick="toggleSport(this)"><div class="se">🏃</div><div class="sn">Running</div></div>
+        <div class="sport-tile" onclick="toggleSport(this)"><div class="se">🏋️</div><div class="sn">Gym</div></div>
+        <div class="sport-tile" onclick="toggleSport(this)"><div class="se">🚴</div><div class="sn">Cycling</div></div>
+        <div class="sport-tile" onclick="toggleSport(this)"><div class="se">🏊</div><div class="sn">Swimming</div></div>
+        <div class="sport-tile" onclick="toggleSport(this)"><div class="se">⚽</div><div class="sn">Football</div></div>
+        <div class="sport-tile" onclick="toggleSport(this)"><div class="se">💪</div><div class="sn">Other</div></div>
+      </div>
+    </div>
+    <div class="btn-black" onclick="go(3)"><span>Next →</span></div>
+  </div>
+
+  <div class="screen" id="s3">
+    <div class="progress" id="prog3"></div>
+    <div class="rblock" style="padding-top:14px;">
+      <div class="caption" style="color:rgba(255,255,255,0.5);">Step 2 of 4</div>
+      <div class="hero-w">WHAT'S<br>YOUR GOAL?</div>
+    </div>
+    <div class="wblock" style="padding-top:16px;">
+      <div class="goal-list">
+        <div class="goal-tile" onclick="selectGoal(this)">
+          <div class="gcheck">✓</div>
+          <div><div class="gtitle">Race Prep</div><div class="gsub">Training for a specific event</div></div>
+        </div>
+        <div class="goal-tile sel" onclick="selectGoal(this)">
+          <div class="gcheck">✓</div>
+          <div><div class="gtitle">Stay Consistent</div><div class="gsub">Build a lasting training habit</div></div>
+        </div>
+        <div class="goal-tile" onclick="selectGoal(this)">
+          <div class="gcheck">✓</div>
+          <div><div class="gtitle">Track Progress</div><div class="gsub">Measure how I improve over time</div></div>
+        </div>
+        <div class="goal-tile" onclick="selectGoal(this)">
+          <div class="gcheck">✓</div>
+          <div><div class="gtitle">Just Exploring</div><div class="gsub">No pressure, curious to try</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-black" onclick="go(4)"><span>Next →</span></div>
+  </div>
+
+  <div class="screen" id="s4">
+    <div class="progress" id="prog4"></div>
+    <div class="yblock" style="padding-top:14px;">
+      <div class="caption">Step 3 of 4</div>
+      <div class="hero" style="font-size:30px;">WHEN DO<br>YOU TRAIN?</div>
+      <div class="sub">We'll remind you to log after each session</div>
+    </div>
+    <div class="wblock" style="padding-top:4px;padding-bottom:0;">
+      <div id="days"></div>
+    </div>
+    <div class="btn-red" onclick="go(5)" style="margin-top:12px;"><span>Save Schedule →</span></div>
+    <div class="skip" onclick="go(5)"><span>Set this up later</span></div>
+  </div>
+
+  <div class="screen" id="s5">
+    <div style="background:#FFE500;padding:22px 22px 24px;flex-shrink:0;">
+      <div style="font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(0,0,0,0.35);margin-bottom:16px;">All done</div>
+      <div style="font-size:40px;font-weight:900;letter-spacing:-1.5px;color:#000;line-height:1.0;text-transform:uppercase;">YOU'RE<br>ALL SET.</div>
+      <div style="font-size:12px;color:rgba(0,0,0,0.45);margin-top:8px;">Time to start logging your sessions.</div>
+    </div>
+    <div class="wblock" style="padding-top:20px;">
+      <div class="caption-w">What's ready</div>
+      <div class="done-list">
+        <div class="done-row"><div class="done-ico">🏃</div><div><div class="done-txt">Sports selected</div><div class="done-sub">Running · Gym</div></div></div>
+        <div class="done-row"><div class="done-ico">🎯</div><div><div class="done-txt">Goal set</div><div class="done-sub">Stay Consistent</div></div></div>
+        <div class="done-row"><div class="done-ico">📅</div><div><div class="done-txt">Schedule configured</div><div class="done-sub">Mon, Wed, Fri · reminders on</div></div></div>
+        <div class="done-row" style="opacity:0.3;"><div class="done-ico" style="background:#f0f0f0;">🔥</div><div><div class="done-txt">Streak</div><div class="done-sub">Log your first session to start</div></div></div>
+      </div>
+    </div>
+    <div class="btn-black" onclick="go(1)"><span>Start Logging →</span></div>
+  </div>
+</div>
+<div style="display:flex;gap:10px;margin-top:16px;" id="dotnav"></div>
+</div>
+
+<script>
+const labels=['Welcome','Sport Selection','Training Goal','Weekly Schedule','All Set!'];
+const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const times=['06:00','07:30','18:00','19:00','17:30','10:00','—'];
+const onDays=[true,false,true,false,true,false,false];
+let cur=1;
+
+function buildDays(){
+  const c=document.getElementById('days');
+  if(!c||c.children.length>0)return;
+  days.forEach((d,i)=>{
+    const row=document.createElement('div');row.className='day-row';
+    const lbl=document.createElement('div');lbl.className='day-lbl';lbl.textContent=d;
+    const tog=document.createElement('div');tog.className='toggle'+(onDays[i]?' on':'');
+    const knob=document.createElement('div');knob.className='tknob';tog.appendChild(knob);
+    const time=document.createElement('div');time.className='time-pill'+(onDays[i]?' show':'');
+    time.textContent=onDays[i]?times[i]:'OFF';
+    tog.onclick=()=>{onDays[i]=!onDays[i];tog.classList.toggle('on');time.classList.toggle('show');time.textContent=onDays[i]?times[i]:'OFF';};
+    row.appendChild(lbl);row.appendChild(tog);row.appendChild(time);c.appendChild(row);
+  });
+}
+
+function buildProgress(id,step){
+  const el=document.getElementById(id);if(!el)return;el.innerHTML='';
+  for(let i=1;i<=4;i++){const d=document.createElement('div');d.className='pdot'+(i<step?' done':i===step?' active':'');el.appendChild(d);}
+}
+
+function buildDotNav(){
+  const c=document.getElementById('dotnav');c.innerHTML='';
+  for(let i=1;i<=5;i++){
+    const d=document.createElement('div');
+    d.style.cssText='width:'+(i===cur?'24':'8')+'px;height:8px;border-radius:4px;background:'+(i===cur?'#FFE500':'#ccc')+';transition:all 0.2s;cursor:pointer;';
+    d.onclick=()=>go(i);c.appendChild(d);
+  }
+}
+
+function go(n){
+  document.getElementById('s'+cur).classList.remove('active');
+  cur=n;
+  document.getElementById('s'+cur).classList.add('active');
+  document.getElementById('toplbl').textContent='Step '+cur+' of 5 — '+labels[cur-1];
+  const nb=document.getElementById('notchbar');
+  const colors=['#FFE500','#FFE500','#E5232A','#FFE500','#FFE500'];
+  nb.style.background=colors[cur-1];
+  buildProgress('prog'+cur,cur-1);
+  buildDotNav();
+  if(cur===4)buildDays();
+}
+
+function toggleSport(el){el.classList.toggle('sel');}
+function selectGoal(el){document.querySelectorAll('.goal-tile').forEach(g=>g.classList.remove('sel'));el.classList.add('sel');}
+
+go(1);
+</script>

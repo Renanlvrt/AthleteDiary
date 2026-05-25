@@ -40,6 +40,19 @@
       ],
       "@react-native-community/datetimepicker",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a1988bf1-64a8-477a-a813-499263193cbf"
+      }
+    },
+    "owner": "renanlvrt",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a1988bf1-64a8-477a-a813-499263193cbf"
+    }
   }
 }
