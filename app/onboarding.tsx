@@ -11,7 +11,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Alert,
   FlatList,
@@ -98,6 +98,13 @@ export default function OnboardingScreen() {
 
   function pressIn() { btnScale.value = withSpring(0.97, { damping: 15 }); }
   function pressOut() { btnScale.value = withSpring(1, { damping: 12 }); }
+
+  // ── Sync layout on window resize ──────────────────────────
+
+  useEffect(() => {
+    // When resizing the browser window, ensure we stay snapped to the correct step
+    flatListRef.current?.scrollToIndex({ index: currentStep, animated: false });
+  }, [screenWidth, currentStep]);
 
   // ── Navigation ────────────────────────────────────────────
 

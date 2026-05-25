@@ -3,22 +3,26 @@
 // LOCAL ONLY — no remote push server
 // ============================================================
 
+import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { TrainingSlot } from './types';
 
-// Set default handler for foreground notifications
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+// Set default handler for foreground notifications (only on native)
+if (Platform.OS !== 'web') {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+}
 
 /** Request notification permissions (call only when user saves schedule) */
 export async function requestNotificationPermissions(): Promise<boolean> {
+  if (Platform.OS === 'web') return false;
   const { status: existing } = await Notifications.getPermissionsAsync();
   if (existing === 'granted') return true;
   const { status } = await Notifications.requestPermissionsAsync();
@@ -31,6 +35,7 @@ export async function requestNotificationPermissions(): Promise<boolean> {
  * Notifications fire 1 hour after the training slot time.
  */
 export async function scheduleTrainingReminders(slots: TrainingSlot[]): Promise<void> {
+  if (Platform.OS === 'web') return;
   await Notifications.cancelAllScheduledNotificationsAsync();
 
   if (slots.length === 0) return;
@@ -69,5 +74,6 @@ export async function scheduleTrainingReminders(slots: TrainingSlot[]): Promise<
 
 /** Cancel all scheduled notifications */
 export async function cancelAllReminders(): Promise<void> {
+  if (Platform.OS === 'web') return;
   await Notifications.cancelAllScheduledNotificationsAsync();
 }
