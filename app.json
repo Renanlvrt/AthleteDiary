@@ -18,7 +18,10 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.athletediary.app"
+      "bundleIdentifier": "com.athletediary.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {

@@ -10,7 +10,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -42,6 +42,16 @@ export default function LogScreen() {
   const router = useRouter();
   const { addSession } = useSessions();
   const insets = useSafeAreaInsets();
+
+  // Safe dismiss: if opened directly via deep link there is no screen
+  // behind this one, so router.back() would crash. Fall back to home.
+  const dismiss = useCallback(() => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace('/');
+    }
+  }, [router]);
 
   const [mood, setMood] = useState<MoodLevel>(5);
   const [performance, setPerformance] = useState<PerformanceLevel | null>(null);
@@ -95,7 +105,7 @@ export default function LogScreen() {
     // never blocks the UX or crashes the save flow.
     void syncWidgetData();
     void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    router.back();
+    dismiss();
   }
 
   const { dayName, dayMonth } = getLogScreenDate();
@@ -115,7 +125,7 @@ export default function LogScreen() {
           {/* ── 1. YELLOW HEADER BLOCK (Edge-to-Edge) ── */}
           <View style={[styles.yellowBlock, { paddingTop: insets.top + SPACING.md }]}>
             <Pressable
-              onPress={() => router.back()}
+              onPress={dismiss}
               style={styles.backButton}
               accessible={true}
               accessibilityLabel="Go back"

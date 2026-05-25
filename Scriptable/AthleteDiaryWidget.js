@@ -468,13 +468,10 @@ async function run() {
       buildSmallPureFire(data, w);
   }
 
-  // ── Deep-link: tap widget → open Expo Go log screen ──────────
-  // The app automatically writes the correct URL into the data blob.
-  // In Expo Go it will be  exp://192.168.x.x:8081/--/log
-  // In a standalone build it will be  athletediary://log
-  if (data?.deepLinkUrl) {
-    w.url = data.deepLinkUrl;
-  }
+  // ── Deep-link: tap widget → open AthleteDiary at Log Session ─
+  // athletediary://log is the standalone app's registered URL scheme.
+  // Works on any WiFi, 5G, or offline — no laptop or Metro needed.
+  w.url = data?.deepLinkUrl ?? "athletediary://log";
 
   // Refresh every 30 minutes
   const next = new Date();

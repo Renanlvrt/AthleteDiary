@@ -63,7 +63,7 @@ export default function WidgetScreen() {
     <View style={styles.root}>
       {/* ── Yellow header ── */}
       <View style={[styles.header, { paddingTop: insets.top + SPACING.md }]}>
-        <Pressable onPress={() => router.back()} style={styles.backBtn} accessibilityLabel="Go back">
+        <Pressable onPress={() => router.canGoBack() ? router.back() : router.replace('/')} style={styles.backBtn} accessibilityLabel="Go back">
           <Ionicons name="chevron-back" size={24} color={COLORS.textOnYellow} />
         </Pressable>
         <Text style={styles.screenLabel}>HOME SCREEN</Text>

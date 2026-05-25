@@ -145,18 +145,23 @@ async function upsertBlob(payload: WidgetPayload): Promise<string | null> {
 // ── Computation helpers ─────────────────────────────────────
 
 /**
- * Returns the best URL to open the app at the Log Session screen.
- * - In Expo Go: exp://HOST:PORT/--/log  (dynamic, auto-detected)
- * - In a standalone build: athletediary://log
+ * Returns the best URL to open the Log Session screen.
+ *
+ * When running inside Expo Go, Constants.expoGoConfig.debuggerHost
+ * gives us the Metro server address (e.g. "192.168.1.42:8081").
+ * We store  exp://IP:PORT/--/log  in the jsonblob payload so that
+ * tapping the widget opens Expo Go directly at the log screen.
+ *
+ * This works on any WiFi where the laptop is also connected and
+ * `npx expo start` is running.  No paid account or Mac required.
  */
 function computeDeepLinkUrl(): string {
-  // Expo Go exposes the Metro bundler host via Constants
   const debuggerHost = Constants.expoGoConfig?.debuggerHost;
   if (debuggerHost) {
-    // e.g. "192.168.1.42:8081"  → "exp://192.168.1.42:8081/--/log"
+    // e.g. "192.168.1.42:8081" → "exp://192.168.1.42:8081/--/log"
     return `exp://${debuggerHost}/--/log`;
   }
-  // Standalone / development build uses the custom URL scheme
+  // Fallback – standalone build (not currently used but kept for future)
   return 'athletediary://log';
 }
 
