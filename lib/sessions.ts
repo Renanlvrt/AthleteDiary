@@ -46,3 +46,13 @@ export async function getLastSport(): Promise<SportType> {
 export async function saveLastSport(sport: SportType): Promise<void> {
   await writeItem(STORAGE_KEYS.LAST_SPORT, sport);
 }
+
+// ── Update note on existing session ────────────────────────────
+export async function updateSessionNote(id: string, note: string): Promise<Session[]> {
+  const sessions = await getSessions();
+  const updated = sessions.map((s) =>
+    s.id === id ? { ...s, notes: note || undefined } : s,
+  );
+  await writeItem(STORAGE_KEYS.SESSIONS, updated);
+  return updated;
+}

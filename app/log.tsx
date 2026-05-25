@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 12,
-    color: COLORS.textPrimary,
+    color: '#111111',   // Dark text — visible on light grey inputBg (#F7F7F7)
     minHeight: 44,
   },
 

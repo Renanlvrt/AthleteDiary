@@ -14,23 +14,19 @@ import { useRouter } from 'expo-router';
 import React, { useRef, useState } from 'react';
 import {
   Alert,
-  Dimensions,
   FlatList,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
-  ViewToken,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-  withTiming,
-  interpolate,
-  Extrapolation,
 } from 'react-native-reanimated';
 import { DayTimePicker } from '../components/DayTimePicker';
 import { useSchedule } from '../hooks/useSchedule';
@@ -38,8 +34,6 @@ import { COLORS, RADIUS, SPACING, ALL_SPORTS, SPORT_FULL_NAMES } from '../lib/co
 import { markOnboardingComplete, saveOnboardingProfile, TrainingGoal } from '../lib/onboarding';
 import { requestNotificationPermissions, scheduleTrainingReminders } from '../lib/notifications';
 import { DayOfWeek, SportType, TrainingSlot } from '../lib/types';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // ─── Types ───────────────────────────────────────────────────
 
@@ -86,6 +80,7 @@ const SPORT_ICONS: Record<SportType, string> = {
 export default function OnboardingScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { width: screenWidth } = useWindowDimensions();
   const { saveSchedule } = useSchedule();
   const flatListRef = useRef<FlatList>(null);
 
@@ -212,6 +207,7 @@ export default function OnboardingScreen() {
     <Screen1Welcome
       key="s1"
       insets={insets}
+      width={screenWidth}
       onNext={handleNext}
       btnAnimStyle={btnAnimStyle}
       pressIn={pressIn}
@@ -220,6 +216,7 @@ export default function OnboardingScreen() {
     <Screen2Sports
       key="s2"
       insets={insets}
+      width={screenWidth}
       selectedSports={selectedSports}
       onToggle={toggleSport}
       onNext={() => {
@@ -237,6 +234,7 @@ export default function OnboardingScreen() {
     <Screen3Goal
       key="s3"
       insets={insets}
+      width={screenWidth}
       selectedGoal={selectedGoal}
       onSelect={selectGoal}
       onNext={() => {
@@ -254,6 +252,7 @@ export default function OnboardingScreen() {
     <Screen4Schedule
       key="s4"
       insets={insets}
+      width={screenWidth}
       slots={slots}
       onUpdateSlot={updateSlot}
       onSave={handleFinishWithSchedule}
@@ -264,6 +263,7 @@ export default function OnboardingScreen() {
     <Screen5AllSet
       key="s5"
       insets={insets}
+      width={screenWidth}
       selectedSports={selectedSports}
       selectedGoal={selectedGoal}
       hasSchedule={slots.some((s) => s.enabled)}
@@ -280,16 +280,16 @@ export default function OnboardingScreen() {
         ref={flatListRef}
         data={screens}
         renderItem={({ item }) => (
-          <View style={{ width: SCREEN_WIDTH }}>{item}</View>
+          <View style={{ width: screenWidth }}>{item}</View>
         )}
         keyExtractor={(_, index) => String(index)}
         horizontal
         pagingEnabled
         scrollEnabled={false}
         showsHorizontalScrollIndicator={false}
-        getItemLayout={(_, index) => ({
-          length: SCREEN_WIDTH,
-          offset: SCREEN_WIDTH * index,
+        getItemLayout={(_, index) => ({  
+          length: screenWidth,
+          offset: screenWidth * index,
           index,
         })}
       />
@@ -314,9 +314,9 @@ export default function OnboardingScreen() {
 
 // ─── Screen 1: Welcome Splash ─────────────────────────────────
 
-function Screen1Welcome({ insets, onNext, btnAnimStyle, pressIn, pressOut }: any) {
+function Screen1Welcome({ insets, width, onNext, btnAnimStyle, pressIn, pressOut }: any) {
   return (
-    <View style={[s1.root, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 80 }]}>
+    <View style={[s1.root, { width, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 80 }]}>
       {/* Wordmark */}
       <Text style={s1.wordmark}>ATHLETE DIARY</Text>
 
@@ -361,7 +361,6 @@ function Screen1Welcome({ insets, onNext, btnAnimStyle, pressIn, pressOut }: any
 const s1 = StyleSheet.create({
   root: {
     flex: 1,
-    width: SCREEN_WIDTH,
     backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.md,
     justifyContent: 'space-between',
@@ -440,9 +439,9 @@ const s1 = StyleSheet.create({
 
 // ─── Screen 2: Sport Selection ────────────────────────────────
 
-function Screen2Sports({ insets, selectedSports, onToggle, onNext, onBack, btnAnimStyle, pressIn, pressOut }: any) {
+function Screen2Sports({ insets, width, selectedSports, onToggle, onNext, onBack, btnAnimStyle, pressIn, pressOut }: any) {
   return (
-    <View style={[s2.root, { paddingBottom: insets.bottom + 80 }]}>
+    <View style={[s2.root, { width, paddingBottom: insets.bottom + 80 }]}>
       {/* Yellow header */}
       <View style={[s2.header, { paddingTop: insets.top + 12 }]}>
         <Pressable onPress={onBack} style={s2.backBtn} accessibilityLabel="Go back">
@@ -510,7 +509,7 @@ function Screen2Sports({ insets, selectedSports, onToggle, onNext, onBack, btnAn
 }
 
 const s2 = StyleSheet.create({
-  root: { flex: 1, width: SCREEN_WIDTH, backgroundColor: '#F0F0F0' },
+  root: { flex: 1, backgroundColor: '#F0F0F0' },
   header: {
     backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.md,
@@ -553,7 +552,7 @@ const s2 = StyleSheet.create({
     gap: 10,
   },
   sportTile: {
-    width: (SCREEN_WIDTH - SPACING.md * 2 - 10) / 2,
+    width: '48%',
     backgroundColor: '#FFFFFF',
     borderRadius: RADIUS.lg,
     padding: SPACING.md,
@@ -606,9 +605,9 @@ const s2 = StyleSheet.create({
 
 // ─── Screen 3: Goal Selection ─────────────────────────────────
 
-function Screen3Goal({ insets, selectedGoal, onSelect, onNext, onBack, btnAnimStyle, pressIn, pressOut }: any) {
+function Screen3Goal({ insets, width, selectedGoal, onSelect, onNext, onBack, btnAnimStyle, pressIn, pressOut }: any) {
   return (
-    <View style={[s3.root, { paddingBottom: insets.bottom + 80 }]}>
+    <View style={[s3.root, { width, paddingBottom: insets.bottom + 80 }]}>
       {/* Yellow header */}
       <View style={[s3.header, { paddingTop: insets.top + 12 }]}>
         <Pressable onPress={onBack} style={s3.backBtn} accessibilityLabel="Go back">
@@ -674,7 +673,7 @@ function Screen3Goal({ insets, selectedGoal, onSelect, onNext, onBack, btnAnimSt
 }
 
 const s3 = StyleSheet.create({
-  root: { flex: 1, width: SCREEN_WIDTH, backgroundColor: '#F0F0F0' },
+  root: { flex: 1, backgroundColor: '#F0F0F0' },
   header: {
     backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.md,
@@ -784,9 +783,9 @@ const s3 = StyleSheet.create({
 
 // ─── Screen 4: Schedule Setup ─────────────────────────────────
 
-function Screen4Schedule({ insets, slots, onUpdateSlot, onSave, onSkip, onBack, saving }: any) {
+function Screen4Schedule({ insets, width, slots, onUpdateSlot, onSave, onSkip, onBack, saving }: any) {
   return (
-    <View style={[s4.root]}>
+    <View style={[s4.root, { width }]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         bounces={false}
@@ -854,7 +853,7 @@ function Screen4Schedule({ insets, slots, onUpdateSlot, onSave, onSkip, onBack, 
 }
 
 const s4 = StyleSheet.create({
-  root: { flex: 1, width: SCREEN_WIDTH, backgroundColor: '#F0F0F0' },
+  root: { flex: 1, backgroundColor: '#F0F0F0' },
   header: {
     backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.md,
@@ -933,11 +932,11 @@ const s4 = StyleSheet.create({
 
 // ─── Screen 5: All Set ────────────────────────────────────────
 
-function Screen5AllSet({ insets, selectedSports, selectedGoal, hasSchedule, onStart, btnAnimStyle, pressIn, pressOut }: any) {
+function Screen5AllSet({ insets, width, selectedSports, selectedGoal, hasSchedule, onStart, btnAnimStyle, pressIn, pressOut }: any) {
   const goalInfo = GOALS.find((g) => g.key === selectedGoal);
 
   return (
-    <View style={[s5.root, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 24 }]}>
+    <View style={[s5.root, { width, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 24 }]}>
       {/* Hero */}
       <View style={s5.heroBlock}>
         <Text style={s5.checkEmoji}>✅</Text>
@@ -1005,7 +1004,6 @@ function Screen5AllSet({ insets, selectedSports, selectedGoal, hasSchedule, onSt
 const s5 = StyleSheet.create({
   root: {
     flex: 1,
-    width: SCREEN_WIDTH,
     backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.md,
   },

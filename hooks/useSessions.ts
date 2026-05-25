@@ -1,15 +1,20 @@
 // ============================================================
-// hooks/useSessions.ts — Load/save sessions + expose addSession
+// hooks/useSessions.ts — Load/save sessions + expose addSession / updateSessionNote
 // ============================================================
 
 import { useCallback, useEffect, useState } from 'react';
-import { addSession as addSessionLib, getSessions } from '../lib/sessions';
+import {
+  addSession as addSessionLib,
+  getSessions,
+  updateSessionNote as updateSessionNoteLib,
+} from '../lib/sessions';
 import { Session } from '../lib/types';
 
 interface UseSessionsReturn {
   sessions: Session[];
   isLoading: boolean;
   addSession: (session: Omit<Session, 'id'>) => Promise<void>;
+  updateSessionNote: (id: string, note: string) => Promise<void>;
   refresh: () => Promise<void>;
 }
 
@@ -32,5 +37,10 @@ export function useSessions(): UseSessionsReturn {
     setSessions(updated);
   }, []);
 
-  return { sessions, isLoading, addSession, refresh: load };
+  const updateSessionNote = useCallback(async (id: string, note: string) => {
+    const updated = await updateSessionNoteLib(id, note);
+    setSessions(updated);
+  }, []);
+
+  return { sessions, isLoading, addSession, updateSessionNote, refresh: load };
 }

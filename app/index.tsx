@@ -39,7 +39,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { sessions, refresh } = useSessions();
+  const { sessions, refresh, updateSessionNote } = useSessions();
   const { schedule } = useSchedule();
   const streak = useStreak(sessions, schedule.isConfigured ? schedule.slots : []);
   const insets = useSafeAreaInsets();
@@ -128,7 +128,11 @@ export default function HomeScreen() {
             </View>
           ) : (
             recentSessions.map((session) => (
-              <SessionCard key={session.id} session={session} />
+              <SessionCard
+                key={session.id}
+                session={session}
+                onUpdateNote={updateSessionNote}
+              />
             ))
           )}
           

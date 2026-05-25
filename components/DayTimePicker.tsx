@@ -157,11 +157,11 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     letterSpacing: 2,
     textTransform: 'uppercase',
-    color: COLORS.textPrimary,
+    color: '#111111',   // Always dark — renders on white schedule card
     width: 36,
   },
   timeButton: {
-    backgroundColor: COLORS.surface,
+    backgroundColor: '#F0F0F0',   // Light grey — visible on white background
     borderRadius: RADIUS.md,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -171,13 +171,13 @@ const styles = StyleSheet.create({
   timeText: {
     fontSize: 14,
     fontWeight: '700',
-    color: COLORS.primary,
+    color: '#111111',   // Dark text on light grey button
     letterSpacing: 0.5,
   },
   offText: {
     fontSize: 10,
     fontWeight: '700',
-    color: COLORS.textMuted,
+    color: '#999999',   // Medium grey — visible on white
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
