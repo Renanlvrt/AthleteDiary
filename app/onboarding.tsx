@@ -943,67 +943,77 @@ function Screen5AllSet({ insets, width, selectedSports, selectedGoal, hasSchedul
   const goalInfo = GOALS.find((g) => g.key === selectedGoal);
 
   return (
-    <View style={[s5.root, { width, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 24 }]}>
-      {/* Hero */}
-      <View style={s5.heroBlock}>
-        <Text style={s5.checkEmoji}>✅</Text>
-        <Text style={s5.headline}>{'ALL\nSET!'}</Text>
-        <Text style={s5.sub}>Here's your setup</Text>
-      </View>
+    <View style={[s5.root, { width }]}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingTop: insets.top + 16,
+          paddingBottom: insets.bottom + 24,
+        }}
+      >
+        {/* Hero */}
+        <View style={s5.heroBlock}>
+          <Text style={s5.checkEmoji}>✅</Text>
+          <Text style={s5.headline}>{'ALL\nSET!'}</Text>
+          <Text style={s5.sub}>Here's your setup</Text>
+        </View>
 
-      {/* Summary cards */}
-      <View style={s5.summaryBlock}>
-        {/* Sports */}
-        <View style={s5.summaryCard}>
-          <Text style={s5.summaryLabel}>YOUR SPORTS</Text>
-          <View style={s5.sportPills}>
-            {selectedSports.length > 0
-              ? selectedSports.map((sport: SportType) => (
-                  <View key={sport} style={s5.pill}>
-                    <Text style={s5.pillText}>
-                      {SPORT_ICONS[sport]} {SPORT_FULL_NAMES[sport].toUpperCase()}
-                    </Text>
-                  </View>
-                ))
-              : <Text style={s5.summaryValue}>Not set</Text>
-            }
+        {/* Summary cards */}
+        <View style={s5.summaryBlock}>
+          {/* Sports */}
+          <View style={s5.summaryCard}>
+            <Text style={s5.summaryLabel}>YOUR SPORTS</Text>
+            <View style={s5.sportPills}>
+              {selectedSports.length > 0
+                ? selectedSports.map((sport: SportType) => (
+                    <View key={sport} style={s5.pill}>
+                      <Text style={s5.pillText}>
+                        {SPORT_ICONS[sport]} {SPORT_FULL_NAMES[sport].toUpperCase()}
+                      </Text>
+                    </View>
+                  ))
+                : <Text style={s5.summaryValue}>Not set</Text>
+              }
+            </View>
+          </View>
+
+          {/* Goal */}
+          <View style={s5.summaryCard}>
+            <Text style={s5.summaryLabel}>YOUR GOAL</Text>
+            <Text style={s5.summaryValue}>
+              {goalInfo ? `${goalInfo.icon} ${goalInfo.label}` : 'Not set'}
+            </Text>
+          </View>
+
+          {/* Schedule */}
+          <View style={s5.summaryCard}>
+            <Text style={s5.summaryLabel}>TRAINING SCHEDULE</Text>
+            <Text style={s5.summaryValue}>
+              {hasSchedule ? '✅ Configured' : '⏭ Set up later'}
+            </Text>
           </View>
         </View>
 
-        {/* Goal */}
-        <View style={s5.summaryCard}>
-          <Text style={s5.summaryLabel}>YOUR GOAL</Text>
-          <Text style={s5.summaryValue}>
-            {goalInfo ? `${goalInfo.icon} ${goalInfo.label}` : 'Not set'}
-          </Text>
-        </View>
+        <View style={s5.spacer} />
 
-        {/* Schedule */}
-        <View style={s5.summaryCard}>
-          <Text style={s5.summaryLabel}>TRAINING SCHEDULE</Text>
-          <Text style={s5.summaryValue}>
-            {hasSchedule ? '✅ Configured' : '⏭ Set up later'}
-          </Text>
-        </View>
-      </View>
-
-      <View style={s5.spacer} />
-
-      {/* CTA */}
-      <Animated.View style={btnAnimStyle}>
-        <Pressable
-          style={s5.ctaButton}
-          onPress={onStart}
-          onPressIn={pressIn}
-          onPressOut={pressOut}
-          accessible={true}
-          accessibilityLabel="Start using Athlete Diary"
-          accessibilityRole="button"
-        >
-          <Text style={s5.ctaText}>START TRAINING DIARY</Text>
-          <Ionicons name="arrow-forward" size={16} color={COLORS.primary} />
-        </Pressable>
-      </Animated.View>
+        {/* CTA */}
+        <Animated.View style={btnAnimStyle}>
+          <Pressable
+            style={s5.ctaButton}
+            onPress={onStart}
+            onPressIn={pressIn}
+            onPressOut={pressOut}
+            accessible={true}
+            accessibilityLabel="Start using Athlete Diary"
+            accessibilityRole="button"
+          >
+            <Text style={s5.ctaText}>START TRAINING DIARY</Text>
+            <Ionicons name="arrow-forward" size={16} color={COLORS.primary} />
+          </Pressable>
+        </Animated.View>
+      </ScrollView>
     </View>
   );
 }
