@@ -13,17 +13,10 @@
 //   8. On your Home Screen, long-press → Add Widget → Scriptable.
 //   9. Pick small/medium/large → select "AthleteDiaryWidget".
 //
-// HOW TO CHANGE WIDGET STYLE (DO NOT MODIFY CODE!):
-//   You have 10 different widgets built-in! To change the style:
-//   1. Long-press the widget on your Home Screen -> Edit Widget.
-//   2. In the "Parameter" field, type a number (1-10) or keyword:
-//      [Small]  1 (Pure Fire), 2 (Action), 3 (Last), 4 (Ring)
-//      [Medium] 5 (Grid), 6 (Dashboard), 7 (Target), 8 (Next)
-//      [Large]  9 (Macro Grid), 10 (Deep Dive)
-//   Leave it empty for the default style.
-//
 // TAPPING THE WIDGET:
 //   Tapping any widget opens the Log Session screen directly.
+//   For Expo Go, just make sure the app is running in the
+//   background first (Metro server must be active).
 //
 // ============================================================
 
@@ -36,19 +29,12 @@ const C = {
   black:    new Color("#000000"),
   yellow:   new Color("#FFE500"),
   white:    new Color("#FFFFFF"),
-  grey:     new Color("#888888"),
+  grey:     new Color("#333333"),
   red:      new Color("#EF4444"),
   orange:   new Color("#F97316"),
   green:    new Color("#22C55E"),
   greenLt:  new Color("#86EFAC"),
-  empty:    Color.dynamic(new Color("#E5E5EA"), new Color("#2C2C2E")),
-
-  // Dynamic design system colors for premium Home Screen widget
-  bg:       Color.dynamic(new Color("#F2F2F7"), new Color("#0A0A0A")),
-  surface:  Color.dynamic(new Color("#FFFFFF"), new Color("#1C1C1E")),
-  text:     Color.dynamic(new Color("#000000"), new Color("#FFFFFF")),
-  textMuted:Color.dynamic(new Color("#8E8E93"), new Color("#8E8E93")),
-  border:   Color.dynamic(new Color("#E5E5EA"), new Color("#2C2C2E")),
+  empty:    new Color("#EBEBEB"),
 };
 
 // ── Mood → fill colour ────────────────────────────────────────
@@ -359,129 +345,90 @@ function buildMediumConsistencyGrid(data, w) {
 
 // =============================================================
 // WIDGET #6 — THE DASHBOARD (Medium)
-// Dynamic background · Yellow streak box left · Sleek info cards right
+// Yellow background · streak pill · next schedule · white card recap
 // =============================================================
 function buildMediumDashboard(data, w) {
-  w.backgroundColor = C.bg;
-  w.setPadding(12, 12, 12, 12);
+  w.backgroundColor = C.yellow;
+  w.setPadding(16, 16, 16, 16);
 
-  const row = w.addStack();
-  row.layoutHorizontally();
-  row.centerAlignContent();
-  row.spacing = 10;
+  const header = w.addStack();
+  header.layoutHorizontally();
+  header.centerAlignContent();
 
-  // Left Column: Yellow Streak Card
-  const leftCard = row.addStack();
-  leftCard.backgroundColor = C.yellow;
-  leftCard.cornerRadius = 16;
-  leftCard.setPadding(12, 12, 12, 12);
-  leftCard.layoutVertically();
-  leftCard.centerAlignContent();
-  leftCard.size = new Size(100, 136);
+  // Streak pill
+  const pill = header.addStack();
+  pill.backgroundColor = C.black;
+  pill.cornerRadius = 100;
+  pill.setPadding(4, 10, 4, 10);
+  pill.layoutHorizontally();
+  pill.centerAlignContent();
+  const spIcon = pill.addText("🔥 ");
+  spIcon.font = Font.boldSystemFont(11);
+  const spNum = pill.addText(data ? String(data.streak) : "–");
+  spNum.font = Font.boldSystemFont(12);
+  spNum.textColor = C.yellow;
 
-  leftCard.addSpacer();
-  const flameEl = leftCard.addText("🔥");
-  flameEl.font = Font.systemFont(24);
-  flameEl.centerAlignText();
+  header.addSpacer();
 
-  leftCard.addSpacer(2);
-
-  const numEl = leftCard.addText(data ? String(data.streak) : "–");
-  numEl.font = Font.boldSystemFont(36);
-  numEl.textColor = C.black;
-  numEl.centerAlignText();
-
-  leftCard.addSpacer(2);
-
-  const lblEl = leftCard.addText("STREAK");
-  lblEl.font = Font.boldSystemFont(9);
-  lblEl.textColor = C.black;
-  lblEl.textOpacity = 0.6;
-  lblEl.centerAlignText();
-  leftCard.addSpacer();
-
-  // Right Column: Vertical stack of Last Session + Next Schedule
-  const rightCol = row.addStack();
-  rightCol.layoutVertically();
-  rightCol.spacing = 8;
-  rightCol.size = new Size(208, 0);
-
-  // 1. Last Session Card
-  const ls = data?.lastSession;
-  const card1 = rightCol.addStack();
-  card1.backgroundColor = C.surface;
-  card1.cornerRadius = 12;
-  card1.setPadding(8, 10, 8, 10);
-  card1.layoutHorizontally();
-  card1.centerAlignContent();
-
-  const iconBox = card1.addStack();
-  iconBox.backgroundColor = C.empty;
-  iconBox.cornerRadius = 8;
-  iconBox.size = new Size(24, 24);
-  iconBox.centerAlignContent();
-  const emojiEl = iconBox.addText(ls ? sportEmoji(ls.sport) : "–");
-  emojiEl.font = Font.systemFont(12);
-  emojiEl.centerAlignText();
-
-  card1.addSpacer(8);
-
-  const info1 = card1.addStack();
-  info1.layoutVertically();
-  const title1 = info1.addText(ls ? ls.sport.toUpperCase() : "NO SESSIONS");
-  title1.font = Font.boldSystemFont(10);
-  title1.textColor = C.text;
-  const sub1 = info1.addText(ls ? `Last: ${ls.date}` : "Tap widget to log");
-  sub1.font = Font.systemFont(8);
-  sub1.textColor = C.textMuted;
-
-  card1.addSpacer();
-
-  if (ls) {
-    const tag = card1.addStack();
-    tag.backgroundColor = new Color("#22C55E", 0.15);
-    tag.cornerRadius = 4;
-    tag.setPadding(2, 6, 2, 6);
-    const tagTxt = tag.addText(perfLabel(ls.performance));
-    tagTxt.font = Font.boldSystemFont(8);
-    tagTxt.textColor = C.green;
-  }
-
-  // 2. Next Schedule Card
-  const card2 = rightCol.addStack();
-  card2.backgroundColor = C.surface;
-  card2.cornerRadius = 12;
-  card2.setPadding(8, 10, 8, 10);
-  card2.layoutHorizontally();
-  card2.centerAlignContent();
-
-  const iconBox2 = card2.addStack();
-  iconBox2.backgroundColor = C.empty;
-  iconBox2.cornerRadius = 8;
-  iconBox2.size = new Size(24, 24);
-  iconBox2.centerAlignContent();
-  const emojiEl2 = iconBox2.addText(ls ? sportEmoji(ls.sport) : "🏃");
-  emojiEl2.font = Font.systemFont(12);
-  emojiEl2.centerAlignText();
-
-  card2.addSpacer(8);
-
-  const info2 = card2.addStack();
-  info2.layoutVertically();
-  const title2 = info2.addText("NEXT WORKOUT");
-  title2.font = Font.boldSystemFont(10);
-  title2.textColor = C.text;
-
-  let schedTxt = "None scheduled";
+  // Next workout schedule text
+  let schedTxt = "No workouts scheduled";
   if (data?.nextSchedule) {
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const dayName = days[data.nextSchedule.dayOfWeek] || "Today";
     const pad = (n) => String(n).padStart(2, '0');
-    schedTxt = `${dayName} ${pad(data.nextSchedule.hour)}:${pad(data.nextSchedule.minute)}`;
+    schedTxt = `Next: ${dayName} ${pad(data.nextSchedule.hour)}:${pad(data.nextSchedule.minute)}`;
   }
-  const sub2 = info2.addText(schedTxt.toUpperCase());
-  sub2.font = Font.systemFont(8);
-  sub2.textColor = C.textMuted;
+  const schedEl = header.addText(schedTxt.toUpperCase());
+  schedEl.font = Font.boldSystemFont(9);
+  schedEl.textColor = C.black;
+  schedEl.textOpacity = 0.6;
+
+  w.addSpacer();
+
+  // Bottom card: white session card
+  const card = w.addStack();
+  card.backgroundColor = C.white;
+  card.cornerRadius = 14;
+  card.setPadding(12, 12, 12, 12);
+  card.layoutHorizontally();
+  card.centerAlignContent();
+
+  // Icon box inside white card
+  const iconBox = card.addStack();
+  iconBox.backgroundColor = new Color("#F5F5F5");
+  iconBox.cornerRadius = 10;
+  iconBox.size = new Size(36, 36);
+  iconBox.centerAlignContent();
+
+  const ls = data?.lastSession;
+  const emojiEl = iconBox.addText(ls ? sportEmoji(ls.sport) : "–");
+  emojiEl.font = Font.systemFont(18);
+  emojiEl.centerAlignText();
+
+  card.addSpacer(12);
+
+  // Card info
+  const info = card.addStack();
+  info.layoutVertically();
+  const titleEl = info.addText(ls ? ls.sport.toUpperCase() : "NO SESSIONS");
+  titleEl.font = Font.boldSystemFont(12);
+  titleEl.textColor = C.black;
+  const subEl = info.addText(ls ? `LAST LOGGED: ${ls.date}` : "Log your first session");
+  subEl.font = Font.systemFont(9);
+  subEl.textColor = new Color("#888888");
+
+  card.addSpacer();
+
+  // Performance tag
+  if (ls) {
+    const tag = card.addStack();
+    tag.backgroundColor = new Color("#22C55E", 0.15);
+    tag.cornerRadius = 6;
+    tag.setPadding(4, 8, 4, 8);
+    const tagTxt = tag.addText(perfLabel(ls.performance));
+    tagTxt.font = Font.boldSystemFont(9);
+    tagTxt.textColor = C.green;
+  }
 
   return w;
 }
@@ -803,80 +750,6 @@ function buildLargeDeepDive(data, w) {
 }
 
 // =============================================================
-// ACCESSORY CIRCULAR — iOS Lock Screen (Circular)
-// Monochromatic mask · flame emoji + streak count
-// =============================================================
-function buildAccessoryCircular(data, w) {
-  w.setPadding(0, 0, 0, 0);
-  const col = w.addStack();
-  col.layoutVertically();
-  col.centerAlignContent();
-
-  const emoji = col.addText("🔥");
-  emoji.font = Font.systemFont(11);
-  emoji.centerAlignText();
-
-  col.addSpacer(1);
-
-  const num = col.addText(data ? String(data.streak) : "–");
-  num.font = Font.boldSystemFont(14);
-  num.centerAlignText();
-
-  return w;
-}
-
-// =============================================================
-// ACCESSORY RECTANGULAR — iOS Lock Screen (Rectangular)
-// Monochromatic mask · streak top · next schedule bottom
-// =============================================================
-function buildAccessoryRectangular(data, w) {
-  w.setPadding(2, 2, 2, 2);
-  const col = w.addStack();
-  col.layoutVertically();
-
-  const row1 = col.addStack();
-  row1.layoutHorizontally();
-  row1.centerAlignContent();
-  const fire = row1.addText("🔥 ");
-  fire.font = Font.systemFont(10);
-  const streak = row1.addText((data ? String(data.streak) : "–") + " DAYS STREAK");
-  streak.font = Font.boldSystemFont(10);
-
-  col.addSpacer(2);
-
-  let schedTxt = "NO WORKOUT";
-  let sportType = "running";
-  if (data?.nextSchedule) {
-    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    const dayName = days[data.nextSchedule.dayOfWeek] || "Today";
-    const pad = (n) => String(n).padStart(2, '0');
-    schedTxt = `${dayName} ${pad(data.nextSchedule.hour)}:${pad(data.nextSchedule.minute)}`;
-    sportType = data.lastSession?.sport ?? "running";
-  }
-  const schedEl = col.addText(schedTxt.toUpperCase() + " · " + sportType.toUpperCase());
-  schedEl.font = Font.systemFont(8);
-  schedEl.textOpacity = 0.8;
-
-  col.addSpacer(1);
-
-  const sport = col.addText(data?.lastSession ? `LAST: ${perfLabel(data.lastSession.performance)}` : "LOG SESSIONS");
-  sport.font = Font.systemFont(8);
-  sport.textOpacity = 0.6;
-
-  return w;
-}
-
-// =============================================================
-// ACCESSORY INLINE — iOS Lock Screen (Inline line)
-// Monochromatic single-line text
-// =============================================================
-function buildAccessoryInline(data, w) {
-  const t = w.addText("🔥 " + (data ? String(data.streak) : "–") + " Day Streak");
-  t.font = Font.boldSystemFont(11);
-  return w;
-}
-
-// =============================================================
 // WIDGET — SETUP SCREEN (shown when DATA_URL not yet configured)
 // =============================================================
 function buildSetupWidget(w) {
@@ -909,12 +782,14 @@ function buildSetupWidget(w) {
 // =============================================================
 // MAIN — route by widget family, attach the deep-link URL
 // =============================================================
+
+// =============================================================
+// RUN DIRECTLY
+// =============================================================
 async function run() {
   const data = await fetchData();
-  const size  = config.widgetFamily;
   let w = new ListWidget();
 
-  // Setup screen if not yet configured
   if (DATA_URL === "PASTE_YOUR_DATA_URL_HERE") {
     buildSetupWidget(w);
     Script.setWidget(w);
@@ -922,59 +797,10 @@ async function run() {
     return;
   }
 
-  const param = (args.widgetParameter || "").toLowerCase().trim();
+  // Directly build the widget
+  buildMediumWeeklyTarget(data, w);
 
-  // Handle iOS Lock Screen Accessory widget families
-  if (size === "accessoryCircular" || param === "circular") {
-    buildAccessoryCircular(data, w);
-  } else if (size === "accessoryRectangular" || param === "rectangular") {
-    buildAccessoryRectangular(data, w);
-  } else if (size === "accessoryInline" || param === "inline") {
-    buildAccessoryInline(data, w);
-  } else {
-    // Standard Home Screen Widgets
-    switch (size) {
-      case "small":
-        if (param === "action" || param === "2") {
-          buildSmallQuickAction(data, w);
-        } else if (param === "last" || param === "3") {
-          buildSmallLastSession(data, w);
-        } else if (param === "ring" || param === "4") {
-          buildSmallMoodRing(data, w);
-        } else {
-          buildSmallPureFire(data, w);
-        }
-        break;
-
-      case "medium":
-        if (param === "dash" || param === "dashboard" || param === "6") {
-          buildMediumDashboard(data, w);
-        } else if (param === "target" || param === "7") {
-          buildMediumWeeklyTarget(data, w);
-        } else if (param === "next" || param === "8") {
-          buildMediumNextUp(data, w);
-        } else {
-          buildMediumConsistencyGrid(data, w);
-        }
-        break;
-
-      case "large":
-        if (param === "deep" || param === "dive" || param === "10") {
-          buildLargeDeepDive(data, w);
-        } else {
-          buildLargeMacroGrid(data, w);
-        }
-        break;
-
-      default:
-        // In-app preview
-        buildSmallPureFire(data, w);
-    }
-  }
-
-  // ── Deep-link: tap widget → open AthleteDiary at Log Session ─
-  // athletediary://log is the standalone app's registered URL scheme.
-  // Works on any WiFi, 5G, or offline — no laptop or Metro needed.
+  // Deep-link URL
   w.url = data?.deepLinkUrl ?? "athletediary://log";
 
   // Refresh every 30 minutes
@@ -984,20 +810,8 @@ async function run() {
 
   Script.setWidget(w);
 
-  // Preview in-app
-  if (size === "accessoryCircular" || param === "circular") {
-    await w.presentAccessoryCircular();
-  } else if (size === "accessoryRectangular" || param === "rectangular") {
-    await w.presentAccessoryRectangular();
-  } else if (size === "accessoryInline" || param === "inline") {
-    await w.presentAccessoryInline();
-  } else if (size === "medium") {
-    await w.presentMedium();
-  } else if (size === "large") {
-    await w.presentLarge();
-  } else {
-    await w.presentSmall();
-  }
+  // Present preview in-app
+  await w.presentMedium();
 
   Script.complete();
 }

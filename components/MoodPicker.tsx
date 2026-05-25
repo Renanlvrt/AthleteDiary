@@ -19,6 +19,8 @@ import { MoodLevel } from '../lib/types';
 interface MoodPickerProps {
   value: MoodLevel;
   onChange: (mood: MoodLevel) => void;
+  onDragStart?: () => void;
+  onDragEnd?: () => void;
 }
 
 function positionToMood(position: number): MoodLevel {
@@ -31,7 +33,7 @@ function positionToMood(position: number): MoodLevel {
 
 const THUMB_SIZE = 28;
 
-export function MoodPicker({ value, onChange }: MoodPickerProps) {
+export function MoodPicker({ value, onChange, onDragStart, onDragEnd }: MoodPickerProps) {
   const trackWidth = useRef(0);
   const [thumbPosition, setThumbPosition] = useState<number>(
     // Map initial value to position
@@ -56,10 +58,17 @@ export function MoodPicker({ value, onChange }: MoodPickerProps) {
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: (evt) => {
+        onDragStart?.();
         updateFromPosition(evt.nativeEvent.locationX);
       },
       onPanResponderMove: (evt) => {
         updateFromPosition(evt.nativeEvent.locationX);
+      },
+      onPanResponderRelease: () => {
+        onDragEnd?.();
+      },
+      onPanResponderTerminate: () => {
+        onDragEnd?.();
       },
     })
   ).current;
@@ -112,7 +121,7 @@ export function MoodPicker({ value, onChange }: MoodPickerProps) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.lg,
+    paddingVertical: 12,
   },
   label: {
     fontSize: 9,
@@ -120,17 +129,17 @@ const styles = StyleSheet.create({
     letterSpacing: 3,
     textTransform: 'uppercase',
     color: '#BBBBBB',
-    marginBottom: SPACING.md,
+    marginBottom: 8,
   },
   trackContainer: {
-    height: 44,
+    height: 36,
     justifyContent: 'center',
     position: 'relative',
   },
   track: {
-    height: 14,
-    borderRadius: 7,
-    marginTop: 15,
+    height: 12,
+    borderRadius: 6,
+    marginTop: 12,
   },
   thumb: {
     position: 'absolute',
@@ -139,13 +148,13 @@ const styles = StyleSheet.create({
     borderRadius: THUMB_SIZE / 2,
     backgroundColor: '#FFFFFF',
     borderWidth: 3,
-    top: 8,
+    top: 4,
     marginLeft: -(THUMB_SIZE / 2),
   },
   labelsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: SPACING.sm,
+    marginTop: 6,
   },
   endLabel: {
     fontSize: 9,
@@ -154,11 +163,11 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   currentLabel: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '900',
     letterSpacing: 1,
     textTransform: 'uppercase',
     textAlign: 'center',
-    marginTop: 6,
+    marginTop: 4,
   },
 });

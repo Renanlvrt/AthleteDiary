@@ -58,6 +58,7 @@ export default function LogScreen() {
   const [sport, setSport] = useState<SportType>('running');
   const [notes, setNotes] = useState('');
   const [perfError, setPerfError] = useState(false);
+  const [scrollEnabled, setScrollEnabled] = useState(true);
 
   // Load last sport on mount
   React.useEffect(() => {
@@ -116,11 +117,10 @@ export default function LogScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.flex}
       >
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          bounces={true}
+        <ScrollView 
+          style={styles.flex} 
           contentContainerStyle={styles.scrollContent}
+          scrollEnabled={scrollEnabled}
         >
           {/* ── 1. YELLOW HEADER BLOCK (Edge-to-Edge) ── */}
           <View style={[styles.yellowBlock, { paddingTop: insets.top + SPACING.md }]}>
@@ -155,7 +155,12 @@ export default function LogScreen() {
 
             {/* ── 2. MOOD SLIDER ── */}
             <View style={styles.whiteSection}>
-              <MoodPicker value={mood} onChange={setMood} />
+              <MoodPicker
+                value={mood}
+                onChange={setMood}
+                onDragStart={() => setScrollEnabled(false)}
+                onDragEnd={() => setScrollEnabled(true)}
+              />
             </View>
 
             <View style={styles.divider} />
@@ -230,10 +235,10 @@ const styles = StyleSheet.create({
   yellowBlock: {
     backgroundColor: COLORS.primary,
     paddingHorizontal: SPACING.md,
-    paddingBottom: 22,
+    paddingBottom: 16,
   },
   backButton: {
-    marginBottom: SPACING.md,
+    marginBottom: 10,
     minHeight: 44,
     justifyContent: 'center',
     alignSelf: 'flex-start',
