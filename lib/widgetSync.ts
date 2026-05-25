@@ -13,6 +13,7 @@
 // ============================================================
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import { STORAGE_KEYS } from './constants';
 import { Session, TrainingSchedule } from './types';
@@ -46,7 +47,8 @@ export interface WidgetPayload {
     scheduledDays: number[];
     completedDays: number[];
   };
-  updatedAt: string;  // ISO timestamp so widget can show staleness
+  updatedAt: string;     // ISO timestamp so widget can show staleness
+  deepLinkUrl: string;   // URL Scriptable uses when the widget is tapped
 }
 
 // ── Main entry point ──────────────────────────────────────────
@@ -89,6 +91,7 @@ export async function syncWidgetData(): Promise<string | null> {
       nextSchedule:  computeNextSchedule(schedule),
       weeklyTarget:  computeWeeklyTarget(sessions, schedule),
       updatedAt:     new Date().toISOString(),
+      deepLinkUrl:   computeDeepLinkUrl(),
     };
 
     const blobUrl = await upsertBlob(payload);
@@ -139,7 +142,23 @@ async function upsertBlob(payload: WidgetPayload): Promise<string | null> {
   return null;
 }
 
-// ── Computation helpers ───────────────────────────────────────
+// ── Computation helpers ─────────────────────────────────────
+
+/**
+ * Returns the best URL to open the app at the Log Session screen.
+ * - In Expo Go: exp://HOST:PORT/--/log  (dynamic, auto-detected)
+ * - In a standalone build: athletediary://log
+ */
+function computeDeepLinkUrl(): string {
+  // Expo Go exposes the Metro bundler host via Constants
+  const debuggerHost = Constants.expoGoConfig?.debuggerHost;
+  if (debuggerHost) {
+    // e.g. "192.168.1.42:8081"  → "exp://192.168.1.42:8081/--/log"
+    return `exp://${debuggerHost}/--/log`;
+  }
+  // Standalone / development build uses the custom URL scheme
+  return 'athletediary://log';
+}
 
 function dateString(d: Date): string {
   return d.toISOString().split('T')[0];

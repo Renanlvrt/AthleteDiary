@@ -7,11 +7,16 @@
 //   3. Paste the entire contents of THIS file.
 //   4. Name the script "AthleteDiaryWidget".
 //   5. Log a session in Athlete Diary to generate your widget URL.
-//   6. In the Athlete Diary app, go to the Widget tab to copy
-//      your personal DATA_URL (looks like jsonblob.com/api/...).
+//   6. In the Athlete Diary app, tap the ⊞ grid icon on the home
+//      screen → Widget Setup → press SYNC NOW → copy the URL.
 //   7. Paste that URL below where it says DATA_URL.
 //   8. On your Home Screen, long-press → Add Widget → Scriptable.
-//   9. Pick small/medium/large and select "AthleteDiaryWidget".
+//   9. Pick small/medium/large → select "AthleteDiaryWidget".
+//
+// TAPPING THE WIDGET:
+//   Tapping any widget opens the Log Session screen directly.
+//   For Expo Go, just make sure the app is running in the
+//   background first (Metro server must be active).
 //
 // ============================================================
 
@@ -32,7 +37,7 @@ const C = {
   empty:    new Color("#EBEBEB"),
 };
 
-// ── Mood → colour mapping ─────────────────────────────────────
+// ── Mood → fill colour ────────────────────────────────────────
 function moodColor(level) {
   switch (level) {
     case 5: return C.green;
@@ -59,9 +64,21 @@ function sportEmoji(sport) {
   return map[sport] || "🏃";
 }
 
-// ── Day abbreviation (Mon-based index 0–6) ────────────────────
-function dayAbbr(i) {
-  return ["MON","TUE","WED","THU","FRI","SAT","SUN"][i] || "";
+// ── Helper: add a perfectly centred text row to a stack ───────
+// This is the ONLY reliable way to centre content in Scriptable.
+// Each text element lives in its own horizontal centred container.
+function addCentredText(parent, text, font, color, opacity) {
+  const row = parent.addStack();
+  row.layoutHorizontally();
+  row.centerAlignContent();
+  row.addSpacer();          // flex-grow left
+  const t = row.addText(text);
+  t.font   = font;
+  t.textColor = color;
+  if (opacity !== undefined) t.textOpacity = opacity;
+  t.centerAlignText();
+  row.addSpacer();          // flex-grow right
+  return t;
 }
 
 // ── Fetch data ────────────────────────────────────────────────
@@ -78,39 +95,41 @@ async function fetchData() {
 
 // =============================================================
 // WIDGET #1 — PURE FIRE (Small)
-// Black background · large yellow streak number · flame
+// Black background · centred flame · large yellow streak number
 // =============================================================
 function buildSmallPureFire(data, w) {
   w.backgroundColor = C.black;
-  w.setPadding(16, 16, 16, 16);
+  w.setPadding(0, 0, 0, 0);  // remove all padding — spacers handle it
 
-  const stack = w.addStack();
-  stack.layoutVertically();
-  stack.centerAlignContent();
+  const col = w.addStack();
+  col.layoutVertically();
+  col.centerAlignContent();
 
-  // Flame
-  const flame = stack.addText("🔥");
-  flame.font = Font.systemFont(32);
-  flame.centerAlignText();
+  // Push content to vertical centre
+  col.addSpacer();
 
-  stack.addSpacer(2);
+  // 🔥 flame — centred
+  addCentredText(col, "🔥", Font.systemFont(30), C.white);
 
-  // Streak number
-  const num = stack.addText(data ? String(data.streak) : "–");
-  num.font = Font.boldSystemFont(52);
-  num.textColor = C.yellow;
-  num.centerAlignText();
-  num.minimumScaleFactor = 0.5;
+  col.addSpacer(4);
 
-  stack.addSpacer(2);
+  // Streak number — centred, scales down for very large numbers
+  const numEl = addCentredText(
+    col,
+    data ? String(data.streak) : "–",
+    Font.boldSystemFont(54),
+    C.yellow,
+  );
+  numEl.minimumScaleFactor = 0.4;
+  numEl.lineLimit = 1;
 
-  // Label
-  const lbl = stack.addText("DAY STREAK");
-  lbl.font = Font.boldSystemFont(9);
-  lbl.textColor = C.yellow;
-  lbl.textOpacity = 0.7;
-  lbl.centerAlignText();
-  lbl.letterSpacing = 2;
+  col.addSpacer(4);
+
+  // "DAY STREAK" label — centred, dimmed
+  addCentredText(col, "DAY STREAK", Font.boldSystemFont(9), C.yellow, 0.7);
+
+  // Push content to vertical centre
+  col.addSpacer();
 
   return w;
 }
@@ -123,7 +142,7 @@ function buildSmallQuickAction(data, w) {
   w.backgroundColor = C.yellow;
   w.setPadding(14, 14, 14, 14);
 
-  // Streak pill (black bg)
+  // Streak pill
   const pill = w.addStack();
   pill.backgroundColor = C.black;
   pill.cornerRadius = 100;
@@ -132,30 +151,28 @@ function buildSmallQuickAction(data, w) {
   pill.centerAlignContent();
 
   const fireT = pill.addText("🔥 ");
-  fireT.font = Font.boldSystemFont(11);
+  fireT.font   = Font.boldSystemFont(11);
   const streakT = pill.addText(data ? String(data.streak) : "–");
-  streakT.font = Font.boldSystemFont(12);
+  streakT.font      = Font.boldSystemFont(12);
   streakT.textColor = C.yellow;
 
   w.addSpacer();
 
-  // Button
+  // LOG SESSION button
   const btn = w.addStack();
   btn.backgroundColor = C.black;
   btn.cornerRadius = 14;
   btn.setPadding(0, 0, 0, 0);
   btn.size = new Size(0, 56);
+  btn.centerAlignContent();
 
-  const btnTxt = btn.addText("+ LOG SESSION");
-  btnTxt.font = Font.boldSystemFont(10);
-  btnTxt.textColor = C.yellow;
-  btnTxt.centerAlignText();
-  btnTxt.minimumScaleFactor = 0.7;
-
-  // Deep-link: tapping the widget opens the app
-  if (config.widgetURL) {
-    w.url = "athletediary://log";
-  }
+  const btnTxt = btn.addStack();
+  btnTxt.addSpacer();
+  const btnLabel = btnTxt.addText("+ LOG SESSION");
+  btnLabel.font      = Font.boldSystemFont(10);
+  btnLabel.textColor = C.yellow;
+  btnLabel.centerAlignText();
+  btnTxt.addSpacer();
 
   return w;
 }
@@ -170,15 +187,16 @@ function buildSmallLastSession(data, w) {
 
   const ls = data?.lastSession;
 
-  // Title
   const title = w.addText("LAST SESSION");
-  title.font = Font.boldSystemFont(8);
+  title.font      = Font.boldSystemFont(8);
   title.textColor = new Color("#BBBBBB");
 
   w.addSpacer();
 
   // Sport icon box
-  const iconBox = w.addStack();
+  const iconRow = w.addStack();
+  iconRow.layoutHorizontally();
+  const iconBox = iconRow.addStack();
   iconBox.backgroundColor = C.black;
   iconBox.cornerRadius = 12;
   iconBox.size = new Size(44, 44);
@@ -199,14 +217,11 @@ function buildSmallLastSession(data, w) {
   dot.cornerRadius = 4;
   perf.addSpacer(6);
   const perfT = perf.addText(ls ? perfLabel(ls.performance) : "–");
-  perfT.font = Font.boldSystemFont(10);
+  perfT.font      = Font.boldSystemFont(10);
   perfT.textColor = new Color("#000000");
 
-  // Sub-info (date · sport)
-  const sub = w.addText(
-    ls ? `${ls.date} · ${ls.sport}` : "No sessions yet"
-  );
-  sub.font = Font.systemFont(9);
+  const sub = w.addText(ls ? `${ls.date} · ${ls.sport}` : "No sessions yet");
+  sub.font      = Font.systemFont(9);
   sub.textColor = new Color("#888888");
   sub.minimumScaleFactor = 0.6;
 
@@ -215,22 +230,20 @@ function buildSmallLastSession(data, w) {
 
 // =============================================================
 // WIDGET #4 — MOOD RING (Small)
-// Black background · weekly mood dots
+// Black background · streak · weekly mood dots
 // =============================================================
 function buildSmallMoodRing(data, w) {
   w.backgroundColor = C.black;
   w.setPadding(16, 16, 16, 16);
 
   const title = w.addText("WEEKLY MOOD");
-  title.font = Font.boldSystemFont(8);
+  title.font      = Font.boldSystemFont(8);
   title.textColor = new Color("#666666");
-  title.letterSpacing = 2;
 
   w.addSpacer(8);
 
-  // Streak
   const streakT = w.addText("🔥 " + (data ? String(data.streak) : "–"));
-  streakT.font = Font.boldSystemFont(20);
+  streakT.font      = Font.boldSystemFont(20);
   streakT.textColor = C.white;
 
   w.addSpacer();
@@ -247,15 +260,15 @@ function buildSmallMoodRing(data, w) {
     dot.cornerRadius = 6;
   }
 
-  // Day labels
   w.addSpacer(2);
+
+  // Day labels
   const dayRow = w.addStack();
   dayRow.layoutHorizontally();
-  dayRow.spacing = 1;
-  const days = ["M","T","W","T","F","S","S"];
-  for (const d of days) {
+  dayRow.spacing = 3;
+  for (const d of ["M","T","W","T","F","S","S"]) {
     const dl = dayRow.addText(d);
-    dl.font = Font.systemFont(7);
+    dl.font      = Font.systemFont(7);
     dl.textColor = new Color("#555555");
   }
 
@@ -274,16 +287,16 @@ function buildMediumConsistencyGrid(data, w) {
   row.layoutHorizontally();
   row.spacing = 12;
 
-  // Left column: streak + log button
+  // Left column
   const left = row.addStack();
   left.layoutVertically();
-  left.size = new Size(68, 0);
+  left.size = new Size(64, 0);
 
   const fireT = left.addText("🔥");
   fireT.font = Font.systemFont(16);
 
   const numT = left.addText(data ? String(data.streak) : "–");
-  numT.font = Font.boldSystemFont(26);
+  numT.font      = Font.boldSystemFont(26);
   numT.textColor = C.black;
   numT.minimumScaleFactor = 0.5;
 
@@ -294,47 +307,39 @@ function buildMediumConsistencyGrid(data, w) {
   btn.cornerRadius = 8;
   btn.setPadding(6, 4, 6, 4);
   const btnT = btn.addText("+ LOG");
-  btnT.font = Font.boldSystemFont(9);
+  btnT.font      = Font.boldSystemFont(9);
   btnT.textColor = C.yellow;
   btnT.centerAlignText();
 
-  // Right column: 4-week grid (7 cols × 4 rows = 28 cells)
+  // Right: 4-week grid (7 cols × 4 rows = 28 cells)
   const right = row.addStack();
   right.layoutVertically();
-  right.spacing = 3;
+  right.spacing = 4;
 
   const cells = data?.heatmapCells ?? Array(28).fill({ mood: 0 });
-  // 4 rows of 7
-  for (let row = 0; row < 4; row++) {
+  for (let r = 0; r < 4; r++) {
     const gridRow = right.addStack();
     gridRow.layoutHorizontally();
-    gridRow.spacing = 3;
-    for (let col = 0; col < 7; col++) {
-      const idx = row * 7 + col;
+    gridRow.spacing = 4;
+    for (let c = 0; c < 7; c++) {
+      const idx = r * 7 + c;
       const cell = cells[idx] ?? { mood: 0 };
       const isToday = idx === cells.length - 1;
 
       const box = gridRow.addStack();
-      box.size = new Size(18, 18);
+      box.size = new Size(20, 20);
       box.backgroundColor = moodColor(cell.mood);
-      box.cornerRadius = 3;
-
-      if (isToday) {
-        // Highlight today with a border-like overlay (Scriptable hack)
-        box.borderColor = C.black;
-        box.borderWidth = 2;
-      }
+      box.cornerRadius = 4;
+      if (isToday) { box.borderColor = C.black; box.borderWidth = 2; }
     }
   }
 
-  w.url = "athletediary://log";
   return w;
 }
 
 // =============================================================
-// WIDGET #9 / LARGE — MACRO GRID
-// White background · 12-col × 7-row full heatmap (84 cells)
-// (Replaces the 4 sessions / 12km stat block with the grid)
+// WIDGET — MACRO GRID (Large)
+// White background · 12×7 full heatmap (84 cells)
 // =============================================================
 function buildLargeMacroGrid(data, w) {
   w.backgroundColor = C.white;
@@ -343,11 +348,11 @@ function buildLargeMacroGrid(data, w) {
   // Header row
   const header = w.addStack();
   header.layoutHorizontally();
+  header.centerAlignContent();
 
   const appName = header.addText("ATHLETE DIARY");
-  appName.font = Font.boldSystemFont(11);
+  appName.font      = Font.boldSystemFont(11);
   appName.textColor = new Color("#CCCCCC");
-  appName.letterSpacing = 3;
 
   header.addSpacer();
 
@@ -361,89 +366,83 @@ function buildLargeMacroGrid(data, w) {
   const pillFire = pill.addText("🔥 ");
   pillFire.font = Font.boldSystemFont(11);
   const pillNum = pill.addText(data ? String(data.streak) : "–");
-  pillNum.font = Font.boldSystemFont(12);
+  pillNum.font      = Font.boldSystemFont(12);
   pillNum.textColor = C.yellow;
 
   w.addSpacer(16);
 
-  // 84-cell grid (12 cols × 7 rows)
-  // We use all available heatmap cells (last 28 days data padded to 84)
+  // 84-cell grid: pad the 28-day data to fill 84 slots
   const baseCells = data?.heatmapCells ?? [];
-  // Build 84 cells: older cells filled as empty
-  const allCells = [];
+  const allCells  = [];
   for (let i = 0; i < 84; i++) {
     const offset = i - (84 - baseCells.length);
-    if (offset >= 0 && offset < baseCells.length) {
-      allCells.push(baseCells[offset]);
-    } else {
-      allCells.push({ mood: 0 });
-    }
+    allCells.push(offset >= 0 && offset < baseCells.length
+      ? baseCells[offset]
+      : { mood: 0 });
   }
 
-  for (let row = 0; row < 7; row++) {
+  for (let r = 0; r < 7; r++) {
     const gridRow = w.addStack();
     gridRow.layoutHorizontally();
     gridRow.spacing = 4;
 
-    for (let col = 0; col < 12; col++) {
-      const idx = row * 12 + col;
-      const cell = allCells[idx];
+    for (let c = 0; c < 12; c++) {
+      const idx   = r * 12 + c;
+      const cell  = allCells[idx];
       const isToday = idx === allCells.length - 1;
 
       const box = gridRow.addStack();
-      box.size = new Size(0, 20);  // width auto via flex
+      box.size  = new Size(0, 22);
       box.backgroundColor = moodColor(cell.mood);
       box.cornerRadius = 3;
-
-      if (isToday) {
-        box.borderColor = C.black;
-        box.borderWidth = 2;
-      }
+      if (isToday) { box.borderColor = C.black; box.borderWidth = 2; }
     }
 
-    if (row < 6) w.addSpacer(4);
+    if (r < 6) w.addSpacer(4);
   }
 
   return w;
 }
 
 // =============================================================
-// WIDGET — SETUP SCREEN (shown when DATA_URL is not configured)
+// WIDGET — SETUP SCREEN (shown when DATA_URL not yet configured)
 // =============================================================
 function buildSetupWidget(w) {
   w.backgroundColor = C.black;
-  w.setPadding(16, 16, 16, 16);
+  w.setPadding(0, 0, 0, 0);
 
-  const t1 = w.addText("⚙️");
-  t1.font = Font.systemFont(28);
-  t1.centerAlignText();
+  const col = w.addStack();
+  col.layoutVertically();
+  col.centerAlignContent();
+  col.addSpacer();
 
-  w.addSpacer(8);
+  addCentredText(col, "⚙️", Font.systemFont(28), C.white);
+  col.addSpacer(8);
+  addCentredText(col, "SETUP NEEDED", Font.boldSystemFont(10), C.yellow);
+  col.addSpacer(6);
 
-  const t2 = w.addText("WIDGET SETUP NEEDED");
-  t2.font = Font.boldSystemFont(10);
-  t2.textColor = C.yellow;
-  t2.centerAlignText();
+  const row = col.addStack();
+  row.layoutHorizontally();
+  row.addSpacer();
+  const hint = row.addText("Open Athlete Diary → ⊞ Widget tab");
+  hint.font        = Font.systemFont(9);
+  hint.textColor   = new Color("#888888");
+  hint.centerAlignText();
+  row.addSpacer();
 
-  w.addSpacer(6);
-
-  const t3 = w.addText("Open Athlete Diary → Widget tab to copy your URL, then paste it in this script.");
-  t3.font = Font.systemFont(9);
-  t3.textColor = new Color("#888888");
-  t3.centerAlignText();
-
+  col.addSpacer();
   return w;
 }
 
 // =============================================================
-// MAIN — choose widget based on size
+// MAIN — route by widget family, attach the deep-link URL
 // =============================================================
 async function run() {
   const data = await fetchData();
   const size  = config.widgetFamily;
   let w = new ListWidget();
 
-  // If not configured yet — show setup screen
+  // Setup screen if not yet configured
   if (DATA_URL === "PASTE_YOUR_DATA_URL_HERE") {
     buildSetupWidget(w);
     Script.setWidget(w);
@@ -453,32 +452,40 @@ async function run() {
 
   switch (size) {
     case "small":
-      // Change the function below to pick a different small widget:
-      // buildSmallPureFire | buildSmallQuickAction |
-      // buildSmallLastSession | buildSmallMoodRing
+      // ← Change the function here to pick a different small widget:
+      //   buildSmallPureFire | buildSmallQuickAction |
+      //   buildSmallLastSession | buildSmallMoodRing
       buildSmallPureFire(data, w);
       break;
-
     case "medium":
       buildMediumConsistencyGrid(data, w);
       break;
-
     case "large":
       buildLargeMacroGrid(data, w);
       break;
-
     default:
-      // Running in-app preview — show the small Pure Fire widget
+      // In-app preview
       buildSmallPureFire(data, w);
   }
 
+  // ── Deep-link: tap widget → open Expo Go log screen ──────────
+  // The app automatically writes the correct URL into the data blob.
+  // In Expo Go it will be  exp://192.168.x.x:8081/--/log
+  // In a standalone build it will be  athletediary://log
+  if (data?.deepLinkUrl) {
+    w.url = data.deepLinkUrl;
+  }
+
   // Refresh every 30 minutes
-  const nextRefresh = new Date();
-  nextRefresh.setMinutes(nextRefresh.getMinutes() + 30);
-  w.refreshAfterDate = nextRefresh;
+  const next = new Date();
+  next.setMinutes(next.getMinutes() + 30);
+  w.refreshAfterDate = next;
 
   Script.setWidget(w);
-  w.presentSmall();   // comment out when installed on Home Screen
+
+  // Comment out the line below once you add it to your Home Screen:
+  await w.presentSmall();
+
   Script.complete();
 }
 
