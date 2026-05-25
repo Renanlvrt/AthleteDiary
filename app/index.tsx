@@ -93,14 +93,24 @@ export default function HomeScreen() {
           {/* Nav row */}
           <View style={styles.navRow}>
             <Text style={styles.appName}>ATHLETE DIARY</Text>
-            <Pressable
-              style={styles.gearButton}
-              onPress={() => router.push('/schedule')}
-              accessible={true}
-              accessibilityLabel="Training schedule settings"
-            >
-              <Ionicons name="calendar-outline" size={16} color={COLORS.primary} />
-            </Pressable>
+            <View style={styles.navButtons}>
+              <Pressable
+                style={styles.gearButton}
+                onPress={() => router.push('/widget')}
+                accessible={true}
+                accessibilityLabel="Widget setup"
+              >
+                <Ionicons name="grid-outline" size={16} color={COLORS.primary} />
+              </Pressable>
+              <Pressable
+                style={styles.gearButton}
+                onPress={() => router.push('/schedule')}
+                accessible={true}
+                accessibilityLabel="Training schedule settings"
+              >
+                <Ionicons name="calendar-outline" size={16} color={COLORS.primary} />
+              </Pressable>
+            </View>
           </View>
 
           {/* Streak */}
@@ -193,6 +203,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  navButtons: {
+    flexDirection: 'row',
+    gap: 8,
   },
   heroText: {
     fontSize: 38,

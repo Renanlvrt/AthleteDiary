@@ -65,6 +65,7 @@ export default function RootLayout() {
           options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
         />
         <Stack.Screen name="schedule" />
+        <Stack.Screen name="widget" />
       </Stack>
     </SafeAreaProvider>
   );

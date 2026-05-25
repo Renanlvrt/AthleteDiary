@@ -111,6 +111,7 @@ export const STORAGE_KEYS = {
   SCHEDULE:            '@athlete_diary:schedule',
   ONBOARDING_COMPLETE: '@athlete_diary:onboarding_complete',
   ONBOARDING_PROFILE:  '@athlete_diary:onboarding_profile',
+  WIDGET_BLOB_ID:      '@athlete_diary:widget_blob_id',  // jsonblob.com relay ID
 } as const;
 
 // ── Spacing ───────────────────────────────────────────────────

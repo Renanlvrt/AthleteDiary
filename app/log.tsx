@@ -36,6 +36,7 @@ import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from '../lib/constants';
 import { getLogScreenDate, getTodayString } from '../lib/dates';
 import { getLastSport, saveLastSport } from '../lib/sessions';
 import { MoodLevel, PerformanceLevel, SportType } from '../lib/types';
+import { syncWidgetData } from '../lib/widgetSync';
 
 export default function LogScreen() {
   const router = useRouter();
@@ -90,6 +91,9 @@ export default function LogScreen() {
     });
 
     await saveLastSport(sport);
+    // Sync widget data in the background — fire-and-forget so it
+    // never blocks the UX or crashes the save flow.
+    void syncWidgetData();
     void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     router.back();
   }
