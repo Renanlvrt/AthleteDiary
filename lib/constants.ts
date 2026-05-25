@@ -106,9 +106,11 @@ export const ALL_SPORTS: SportType[] = [
 
 // ── AsyncStorage keys ─────────────────────────────────────────
 export const STORAGE_KEYS = {
-  SESSIONS:   '@athlete_diary:sessions',
-  LAST_SPORT: '@athlete_diary:last_sport',
-  SCHEDULE:   '@athlete_diary:schedule',
+  SESSIONS:            '@athlete_diary:sessions',
+  LAST_SPORT:          '@athlete_diary:last_sport',
+  SCHEDULE:            '@athlete_diary:schedule',
+  ONBOARDING_COMPLETE: '@athlete_diary:onboarding_complete',
+  ONBOARDING_PROFILE:  '@athlete_diary:onboarding_profile',
 } as const;
 
 // ── Spacing ───────────────────────────────────────────────────

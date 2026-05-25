@@ -1,21 +1,32 @@
 // ============================================================
 // app/_layout.tsx — Root layout: dark status bar, expo-router setup
-// Refactored to enable individual screen full-screen design.
-// Removed global dark background constraint from stack navigator contentStyle.
+// Checks onboarding completion on first load and redirects.
 // ============================================================
 
 import * as Notifications from 'expo-notifications';
 import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useSchedule } from '../hooks/useSchedule';
 import { scheduleTrainingReminders } from '../lib/notifications';
-import { COLORS } from '../lib/constants';
+import { isOnboardingComplete } from '../lib/onboarding';
 
 export default function RootLayout() {
   const router = useRouter();
   const { schedule, isLoading } = useSchedule();
+  const [onboardingChecked, setOnboardingChecked] = useState(false);
+
+  // Check onboarding on every launch — redirect to onboarding if not complete
+  useEffect(() => {
+    isOnboardingComplete().then((done) => {
+      setOnboardingChecked(true);
+      if (!done) {
+        router.replace('/onboarding');
+      }
+    });
+  }, [router]);
 
   // Re-schedule notifications on every launch
   useEffect(() => {
@@ -39,17 +50,16 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      {/* Set status bar to dark text, assuming a bright background ground */}
+      {/* Status bar uses dark text — works for both yellow and white backgrounds */}
       <StatusBar style="dark" />
       <Stack
         screenOptions={{
           headerShown: false,
           animation: 'fade',
-          // Removed: contentStyle: { backgroundColor: '#0A0A0A' },
-          // Allows individual screens to control their background fully
         }}
       >
         <Stack.Screen name="index" />
+        <Stack.Screen name="onboarding" options={{ animation: 'none' }} />
         <Stack.Screen
           name="log"
           options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
