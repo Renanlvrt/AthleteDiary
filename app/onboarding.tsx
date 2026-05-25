@@ -1015,7 +1015,6 @@ const s5 = StyleSheet.create({
     paddingHorizontal: SPACING.md,
   },
   heroBlock: {
-    flex: 0,
     paddingVertical: SPACING.lg,
   },
   checkEmoji: { fontSize: 48, marginBottom: 12 },
