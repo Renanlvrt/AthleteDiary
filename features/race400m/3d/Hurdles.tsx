@@ -30,7 +30,33 @@ export function Hurdles() {
     <group ref={groupRef}>
       {HURDLE_DISTANCES.map((hurdleZ, i) => (
         <group key={i} position={[0, 0, -hurdleZ]}>
-          {/* Main crossbar (white/red striped ideally, but white for simplicity) */}
+          
+          {/* ── Take-off Indicator Board ── */}
+          {/* Placed 2 to 4 meters before the hurdle. 
+              Z is positive here so it sits closer to the approaching player. */}
+          <group position={[0, 0.015, 3]}>
+            {/* Green (Perfect Zone: 2.5m - 3.5m away) */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
+              <planeGeometry args={[TRACK_WIDTH, 1]} />
+              <meshBasicMaterial color="#22C55E" />
+            </mesh>
+            {/* Yellow (Early/Late Zone) */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0.75]}>
+              <planeGeometry args={[TRACK_WIDTH, 0.5]} />
+              <meshBasicMaterial color="#EAB308" />
+            </mesh>
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -0.75]}>
+              <planeGeometry args={[TRACK_WIDTH, 0.5]} />
+              <meshBasicMaterial color="#EAB308" />
+            </mesh>
+            {/* Red (Foul/Crash Zone) */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, -1.25]}>
+              <planeGeometry args={[TRACK_WIDTH, 0.5]} />
+              <meshBasicMaterial color="#EF4444" />
+            </mesh>
+          </group>
+
+          {/* Main crossbar */}
           <mesh position={[0, 0.8, 0]}>
             <boxGeometry args={[TRACK_WIDTH * 0.9, 0.08, 0.05]} />
             <meshStandardMaterial color="#FFFFFF" roughness={0.6} metalness={0.1} />

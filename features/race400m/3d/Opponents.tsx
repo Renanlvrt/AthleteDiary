@@ -23,7 +23,7 @@ function OpponentMesh({ colour, laneX, index }: OpponentMeshProps) {
   const bobOffset = useRef(index * 1.3); // stagger phases so they don't all bob in sync
 
   useFrame((_, delta) => {
-    const { distance, opponentDistances, difficulty, phase } = useGameStore.getState();
+    const { distance, opponentDistances, difficulty, phase, opponentY } = useGameStore.getState();
     if (!groupRef.current) return;
 
     const opponentDist = opponentDistances[index] ?? 0;
@@ -31,30 +31,33 @@ function OpponentMesh({ colour, laneX, index }: OpponentMeshProps) {
     const profile = profiles[index];
     if (!profile) return;
 
-    // Z offset: negative = ahead of player, positive = behind
-    const relativeZ = (distance - opponentDist) * 0.3; // scale to 3D units
+    const relativeZ = (distance - opponentDist) * 0.3;
     groupRef.current.position.z = Math.max(-30, Math.min(30, relativeZ));
 
-    // Bob animation
     if (phase === 'racing' || phase === 'minigame') {
       const speed = profile.speedMultiplier * 6;
       bobOffset.current += delta * speed;
-      groupRef.current.position.y = Math.sin(bobOffset.current) * 0.05;
+      groupRef.current.position.y = (Math.sin(bobOffset.current) * 0.05) + (opponentY?.[index] ?? 0);
       groupRef.current.rotation.x = -0.1;
     }
   });
 
   return (
     <group ref={groupRef} position={[laneX, 0, 0]}>
-      {/* Body box */}
+      {/* Fake Drop Shadow */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
+        <planeGeometry args={[0.6, 0.6]} />
+        <meshBasicMaterial color="#000000" transparent opacity={0.25} depthWrite={false} />
+      </mesh>
+      {/* Body */}
       <mesh position={[0, 0.9, 0]}>
-        <capsuleGeometry args={[0.24, 1.0, 8, 16]} />
-        <meshLambertMaterial color={colour} />
+        <capsuleGeometry args={[0.24, 1.0, 16, 32]} />
+        <meshStandardMaterial color={colour} roughness={0.4} metalness={0.1} />
       </mesh>
       {/* Head */}
       <mesh position={[0, 1.65, 0]}>
-        <sphereGeometry args={[0.20, 10, 10]} />
-        <meshLambertMaterial color="#F5C5A3" />
+        <sphereGeometry args={[0.20, 16, 16]} />
+        <meshStandardMaterial color="#F5C5A3" roughness={0.5} />
       </mesh>
     </group>
   );

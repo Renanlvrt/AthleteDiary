@@ -5,7 +5,8 @@
 // Only the hold area intercepts touches.
 // ============================================================
 
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, StyleSheet, TouchableOpacity } from 'react-native';
+import { useEffect } from 'react';
 import * as Haptics from 'expo-haptics';
 import { useGameStore } from '../game/gameStore';
 import { EnergyBar }       from './EnergyBar';
@@ -22,6 +23,16 @@ export function HUD({ onQuit }: HUDProps) {
   const setHolding = useGameStore((s) => s.setHolding);
   const jump       = useGameStore((s) => s.jump);
   const raceType   = useGameStore((s) => s.raceType);
+  const feedback   = useGameStore((s) => s.feedbackToast);
+  const clearToast = useGameStore((s) => s.clearFeedbackToast);
+
+  // Auto-clear toast
+  useEffect(() => {
+    if (feedback) {
+      const t = setTimeout(clearToast, 1500);
+      return () => clearTimeout(t);
+    }
+  }, [feedback]);
 
   function handlePressIn() {
     setHolding(true);
@@ -40,27 +51,32 @@ export function HUD({ onQuit }: HUDProps) {
   return (
     <View style={styles.root} pointerEvents="box-none">
       {/* ── Top bar ─── */}
-      <View style={styles.topBar} pointerEvents="box-none">
-        <TouchableWithoutFeedback onPress={onQuit}>
-          <View style={styles.quitButton}>
-            <Text style={styles.quitText}>← QUIT</Text>
-          </View>
-        </TouchableWithoutFeedback>
-        <PlaceIndicator />
-        <View style={{ width: 60 }} />
+      <View style={styles.topBar}>
+        <TouchableOpacity style={styles.quitBtn} onPress={onQuit}>
+          <Text style={styles.quitText}>✕ QUIT</Text>
+        </TouchableOpacity>
+        <EnergyBar />
       </View>
+
+      {/* ── Feedback Toast ── */}
+      {feedback && (
+        <View style={styles.toastContainer} pointerEvents="none">
+          <View style={[styles.toast, feedback.type === 'fail' && styles.toastFail]}>
+            <Text style={[styles.toastText, feedback.type === 'fail' && styles.toastTextFail]}>
+              {feedback.message}
+            </Text>
+          </View>
+        </View>
+      )}
 
       {/* ── Spacer — lets 3D scene breathe ── */}
       <View style={{ flex: 1 }} pointerEvents="none" />
 
       {/* ── Bottom HUD panel ── */}
       <View style={styles.bottomPanel} pointerEvents="box-none">
-        {/* Energy bar */}
-        <EnergyBar />
-
         <View style={styles.midRow} pointerEvents="none">
           <SpeedDisplay />
-          <View style={{ flex: 1 }} />
+          <PlaceIndicator />
         </View>
 
         {/* 400m progress strip */}
@@ -74,10 +90,13 @@ export function HUD({ onQuit }: HUDProps) {
             </View>
           </TouchableWithoutFeedback>
 
-          {raceType === 'hurdles' && (
+          {/* SPRINT VS JUMP CONTROLS */}
+          {(raceType === 'hurdles' || raceType === 'long_jump') && (
             <TouchableWithoutFeedback onPress={handleJump}>
               <View style={[styles.controlBtn, styles.jumpBtn]}>
-                <Text style={[styles.controlText, styles.jumpText]}>TAP TO JUMP</Text>
+                <Text style={[styles.controlText, styles.jumpText]}>
+                  {raceType === 'long_jump' ? 'JUMP (AT LINE)' : 'TAP TO JUMP'}
+                </Text>
               </View>
             </TouchableWithoutFeedback>
           )}
@@ -93,14 +112,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   topBar: {
-    flexDirection:  'row',
-    alignItems:     'center',
+    flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-start',
     paddingHorizontal: RACE_SPACING.md,
-    paddingTop: RACE_SPACING.lg,
-    paddingBottom: RACE_SPACING.sm,
+    marginTop: RACE_SPACING.xl + 20, // Lowered
   },
-  quitButton: {
+  quitBtn: {
     backgroundColor: 'rgba(0,0,0,0.45)',
     paddingHorizontal: 12,
     paddingVertical:   7,
@@ -156,5 +174,29 @@ const styles = StyleSheet.create({
   },
   jumpText: {
     color: RACE_COLOURS.yellow,
+  },
+  toastContainer: {
+    position: 'absolute',
+    top: 180,
+    width: '100%',
+    alignItems: 'center',
+  },
+  toast: {
+    backgroundColor: 'rgba(34,197,94,0.9)', // Green success
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+  },
+  toastFail: {
+    backgroundColor: 'rgba(239,68,68,0.9)', // Red fail
+  },
+  toastText: {
+    color: '#000',
+    fontWeight: '900',
+    fontSize: 16,
+    letterSpacing: 1,
+  },
+  toastTextFail: {
+    color: '#FFF',
   },
 });

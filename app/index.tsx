@@ -165,6 +165,23 @@ export default function HomeScreen() {
               <Text style={styles.raceCardBadgeText}>PLAY →</Text>
             </View>
           </Pressable>
+
+          {/* LONG JUMP CARD */}
+          <Pressable
+            style={[styles.raceCard, { marginTop: 8 }]}
+            onPress={() => {
+              void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              router.push({ pathname: '/race', params: { type: 'long_jump' } });
+            }}
+          >
+            <View>
+              <Text style={styles.raceCardTitle}>LONG JUMP</Text>
+              <Text style={styles.raceCardSub}>Timing Event · 10 sec</Text>
+            </View>
+            <View style={styles.raceCardBadge}>
+              <Text style={styles.raceCardBadgeText}>PLAY →</Text>
+            </View>
+          </Pressable>
         </View>
 
         {/* ── 4. REFINED RECENT SESSIONS SECTION ── */}

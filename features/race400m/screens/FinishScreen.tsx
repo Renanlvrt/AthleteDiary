@@ -60,6 +60,7 @@ export function FinishScreen({ onRaceAgain, onHome, playerName }: FinishScreenPr
     raceType,
     hurdlesCleared,
     hurdlesHit,
+    jumpDistance,
   } = useGameStore();
 
   const miniGamesTotal = miniGamesWon + miniGamesLost;
@@ -83,29 +84,32 @@ export function FinishScreen({ onRaceAgain, onHome, playerName }: FinishScreenPr
         reactionTimeMs,
         date: new Date().toISOString(),
         ...(raceType === 'hurdles' ? { hurdlesCleared } : {}),
+        ...(raceType === 'long_jump' ? { jumpDistance } : {}),
       };
       const wasPB = await savePersonalBest(raceType, pbData);
       setIsNewPB(wasPB);
       const savedPB = await loadPersonalBest(raceType);
       setPb(savedPB);
 
-      // Submit to leaderboard
-      await submitScore({
-        name: playerName,
-        timeMs,
-        topSpeed,
-        miniGamesWon,
-        miniGamesTotal,
-        date: new Date().toISOString().slice(0, 10),
-      });
+      // Submit to leaderboard (Skip for Long Jump in V1 since sorting expects timeMs)
+      if (raceType !== 'long_jump') {
+        await submitScore({
+          name: playerName,
+          timeMs,
+          topSpeed,
+          miniGamesWon,
+          miniGamesTotal,
+          date: new Date().toISOString().slice(0, 10),
+        });
 
-      // Fetch updated board
-      const updatedBoard = await fetchLeaderboard();
-      setBoard(updatedBoard.slice(0, 6));
-      const myIdx = updatedBoard.findIndex(
-        (e) => e.name === playerName && e.timeMs === timeMs,
-      );
-      setPlayerIdx(myIdx);
+        // Fetch updated board
+        const updatedBoard = await fetchLeaderboard();
+        setBoard(updatedBoard.slice(0, 6));
+        const myIdx = updatedBoard.findIndex(
+          (e) => e.name === playerName && e.timeMs === timeMs,
+        );
+        setPlayerIdx(myIdx);
+      }
 
       if (wasPB) {
         void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -146,7 +150,11 @@ export function FinishScreen({ onRaceAgain, onHome, playerName }: FinishScreenPr
       <View style={styles.pbStrip}>
         <View>
           <Text style={styles.pbLabel}>YOUR PERSONAL BEST</Text>
-          <Text style={styles.pbValue}>{pb ? formatRaceTime(pb.timeMs) : formatRaceTime(timeMs)}</Text>
+          {raceType === 'long_jump' ? (
+            <Text style={styles.pbValue}>{pb?.jumpDistance ? `${pb.jumpDistance}m` : (jumpDistance ? `${jumpDistance}m` : 'FOUL')}</Text>
+          ) : (
+            <Text style={styles.pbValue}>{pb ? formatRaceTime(pb.timeMs) : formatRaceTime(timeMs)}</Text>
+          )}
         </View>
         <View style={styles.pbRight}>
           {isNewPB && (
@@ -155,7 +163,9 @@ export function FinishScreen({ onRaceAgain, onHome, playerName }: FinishScreenPr
             </View>
           )}
           <Text style={styles.pbMeta}>
-            Race time: {formatRaceTime(timeMs)}
+            {raceType === 'long_jump' 
+              ? `Jump: ${jumpDistance ? `${jumpDistance}m` : 'FOUL'}` 
+              : `Race time: ${formatRaceTime(timeMs)}`}
           </Text>
         </View>
       </View>
@@ -165,7 +175,9 @@ export function FinishScreen({ onRaceAgain, onHome, playerName }: FinishScreenPr
         {[
           { label: 'TOP SPEED',   value: `${Math.round(topSpeed * 1.2)} km/h` },
           { label: 'MINI-GAMES',  value: `${miniGamesWon}/${miniGamesTotal}` },
-          ...(raceType === 'hurdles' ? [{ label: 'HURDLES', value: `${hurdlesCleared}/10` }] : [{ label: 'POSITION',    value: getPlaceText(playerRank) }]),
+          ...(raceType === 'hurdles' ? [{ label: 'HURDLES', value: `${hurdlesCleared}/10` }] : 
+             raceType === 'long_jump' ? [{ label: 'RESULT', value: jumpDistance ? 'VALID' : 'FOUL' }] :
+             [{ label: 'POSITION',    value: getPlaceText(playerRank) }]),
         ].map(({ label, value }) => (
           <View key={label} style={styles.statBox}>
             <Text style={styles.statValue}>{value}</Text>
@@ -175,8 +187,9 @@ export function FinishScreen({ onRaceAgain, onHome, playerName }: FinishScreenPr
       </View>
 
       {/* ── Leaderboard rows ── */}
-      <View style={styles.lbList}>
-        {board.map((entry, i) => {
+      {raceType !== 'long_jump' && (
+        <View style={styles.lbList}>
+          {board.map((entry, i) => {
           const isMe = i === playerIndex;
           return (
             <View key={i} style={[styles.lbRow, isMe && styles.lbRowMe]}>
@@ -205,8 +218,9 @@ export function FinishScreen({ onRaceAgain, onHome, playerName }: FinishScreenPr
               </View>
             </View>
           );
-        })}
-      </View>
+          })}
+        </View>
+      )}
 
       {/* ── CTA buttons ── */}
       <View style={styles.ctaRow}>

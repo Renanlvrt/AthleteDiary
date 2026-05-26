@@ -101,7 +101,7 @@ export function PreRaceScreen({ onStart, onBack }: PreRaceScreenProps) {
 
         {/* Hero title */}
         <Text style={styles.titleLine1}>
-            {raceType === 'flat' ? '400M SPRINT' : '400M HURDLES'}
+            {raceType === 'flat' ? '400M SPRINT' : raceType === 'hurdles' ? '400M HURDLES' : 'LONG JUMP'}
         </Text>
 
         {/* Difficulty */}

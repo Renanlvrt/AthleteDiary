@@ -13,6 +13,7 @@ import { Athlete }    from './Athlete';
 import { Opponents }  from './Opponents';
 import { CameraRig }  from './CameraRig';
 import { Hurdles }    from './Hurdles';
+import { LongJump }   from './LongJump';
 
 // ─── Pure logic component — no mesh ───────────────────────────
 function GameLoop() {
@@ -62,6 +63,7 @@ export function Scene({ speedScale = 1 }: SceneProps) {
       {/* World */}
       <Track />
       <Hurdles />
+      <LongJump />
       <Opponents />
       <Athlete />
       <CameraRig />

@@ -21,7 +21,7 @@ import { FinishScreen }       from './screens/FinishScreen';
 interface RaceEntryProps {
   onNavigateHome: () => void;
   playerName?: string;
-  raceType?: 'flat' | 'hurdles';
+  raceType?: 'flat' | 'hurdles' | 'long_jump';
 }
 
 export default function RaceEntry({ onNavigateHome, playerName = 'You', raceType = 'flat' }: RaceEntryProps) {
