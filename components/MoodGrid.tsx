@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   monthText: {
-    fontSize: 7,
+    fontSize: 9,
     color: '#888888', // More readable contrast against light cream card background
     fontWeight: '700',
     letterSpacing: 0.3,

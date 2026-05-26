@@ -441,7 +441,7 @@ const s1 = StyleSheet.create({
     paddingHorizontal: 24,
   },
   headerLbl: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '900',
     letterSpacing: 3,
     textTransform: 'uppercase',
@@ -514,7 +514,7 @@ const s1 = StyleSheet.create({
   },
   btnSub: {
     textAlign: 'center',
-    fontSize: 10,
+    fontSize: 12,
     color: '#888',
     fontWeight: '600',
     letterSpacing: 1,
@@ -609,7 +609,7 @@ const s2 = StyleSheet.create({
     marginBottom: 4,
   },
   step: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '800',
     letterSpacing: 2,
     color: COLORS.textOnYellow,
@@ -654,7 +654,7 @@ const s2 = StyleSheet.create({
   },
   sportEmoji: { fontSize: 28, marginBottom: 6 },
   sportLabel: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '800',
     letterSpacing: 1,
     color: '#333333',
@@ -687,7 +687,7 @@ const s2 = StyleSheet.create({
   },
   ctaDisabled: { opacity: 0.4 },
   ctaText: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '900',
     color: COLORS.black,
     letterSpacing: 2,
@@ -780,7 +780,7 @@ const s3 = StyleSheet.create({
     marginBottom: 4,
   },
   step: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '800',
     letterSpacing: 2,
     color: COLORS.textOnYellow,
@@ -821,7 +821,7 @@ const s3 = StyleSheet.create({
   goalIcon: { fontSize: 28, width: 40, textAlign: 'center' },
   goalText: { flex: 1 },
   goalLabel: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '900',
     letterSpacing: 1,
     color: '#111111',
@@ -829,7 +829,7 @@ const s3 = StyleSheet.create({
   },
   goalLabelActive: { color: COLORS.black },
   goalSub: {
-    fontSize: 11,
+    fontSize: 13,
     color: '#888888',
     marginTop: 2,
     lineHeight: 15,
@@ -872,7 +872,7 @@ const s3 = StyleSheet.create({
   },
   ctaDisabled: { opacity: 0.4 },
   ctaText: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '900',
     color: COLORS.black,
     letterSpacing: 2,
@@ -970,7 +970,7 @@ const s4 = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   step: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '800',
     letterSpacing: 2,
     color: COLORS.textOnYellow,
@@ -1016,7 +1016,7 @@ const s4 = StyleSheet.create({
   },
   saveDisabled: { opacity: 0.5 },
   saveText: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '900',
     color: COLORS.black,
     letterSpacing: 2,
@@ -1147,7 +1147,7 @@ const s5 = StyleSheet.create({
     transform: [{ rotate: '10deg' }],
   },
   stepLbl: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '800',
     letterSpacing: 3,
     textTransform: 'uppercase',
@@ -1174,7 +1174,7 @@ const s5 = StyleSheet.create({
     paddingTop: 24,
   },
   sectionTitle: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '900',
     letterSpacing: 3,
     textTransform: 'uppercase',
@@ -1242,7 +1242,7 @@ const s5 = StyleSheet.create({
     color: '#000',
   },
   cardValue: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '600',
     color: '#888',
     marginTop: 4,

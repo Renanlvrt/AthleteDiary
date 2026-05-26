@@ -1,0 +1,184 @@
+
+<style>
+  :root {
+    --yellow: #FFE500;
+    --yellow-dark: #E6CE00;
+    --ink: #0A0A0A;
+    --ink-mid: #3A3A3A;
+    --ink-soft: #888;
+    --surface: var(--color-background-primary);
+    --surface-2: var(--color-background-secondary);
+    --border: var(--color-border-tertiary);
+  }
+  .lb-wrap { font-family: var(--font-sans); max-width: 370px; margin: 0 auto; padding: 0 0 1.5rem; }
+  .lb-header { background: var(--yellow); padding: 20px 20px 16px; border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0; }
+  .lb-header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .lb-back { font-size: 13px; color: var(--ink); font-weight: 500; display: flex; align-items: center; gap: 4px; cursor: pointer; background: none; border: none; padding: 0; }
+  .lb-date { font-size: 12px; font-weight: 600; color: var(--ink-mid); letter-spacing: 1px; text-transform: uppercase; }
+  .lb-title { font-size: 34px; font-weight: 900; color: var(--ink); line-height: 1; letter-spacing: -1.5px; margin: 0 0 2px; }
+  .lb-subtitle { font-size: 13px; color: var(--ink-mid); font-weight: 500; margin-bottom: 16px; }
+  .lb-tabs { display: flex; gap: 6px; }
+  .lb-tab { font-size: 12px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 7px 14px; border-radius: 20px; border: 1.5px solid var(--ink); cursor: pointer; transition: all 0.15s; }
+  .lb-tab.active { background: var(--ink); color: var(--yellow); }
+  .lb-tab:not(.active) { background: transparent; color: var(--ink); }
+  .lb-pb-strip { margin: 0 16px; background: var(--ink); border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .lb-pb-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #888; }
+  .lb-pb-value { font-size: 22px; font-weight: 900; color: var(--yellow); letter-spacing: -0.5px; }
+  .lb-pb-badge { font-size: 10px; font-weight: 700; background: var(--yellow); color: var(--ink); padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .lb-list { padding: 12px 16px 0; display: flex; flex-direction: column; gap: 6px; }
+  .lb-row { display: flex; align-items: center; padding: 11px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--border); background: var(--surface); gap: 12px; transition: all 0.15s; }
+  .lb-row.me { background: var(--yellow); border-color: var(--yellow-dark); }
+  .lb-row.medal-1 { border-color: var(--color-border-secondary); }
+  .lb-rank { font-size: 13px; font-weight: 800; color: var(--color-text-secondary); min-width: 22px; text-align: center; }
+  .lb-row.me .lb-rank { color: var(--ink); }
+  .lb-medal { font-size: 15px; min-width: 22px; text-align: center; }
+  .lb-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .lb-row.me .lb-avatar { background: var(--ink); color: var(--yellow); }
+  .lb-av-a { background: var(--color-background-secondary); color: var(--color-text-secondary); }
+  .lb-info { flex: 1; min-width: 0; }
+  .lb-name { font-size: 14px; font-weight: 700; color: var(--color-text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lb-row.me .lb-name { color: var(--ink); }
+  .lb-meta { font-size: 11px; color: var(--color-text-secondary); font-weight: 500; margin-top: 1px; }
+  .lb-row.me .lb-meta { color: var(--ink-mid); }
+  .lb-time { font-size: 16px; font-weight: 900; color: var(--color-text-primary); letter-spacing: -0.5px; flex-shrink: 0; }
+  .lb-row.me .lb-time { color: var(--ink); }
+  .lb-time-label { font-size: 10px; font-weight: 600; color: var(--color-text-secondary); letter-spacing: 0.5px; text-align: right; text-transform: uppercase; margin-top: 1px; }
+  .lb-row.me .lb-time-label { color: var(--ink-mid); }
+  .lb-divider { display: flex; align-items: center; gap: 8px; padding: 4px 16px; }
+  .lb-divider-line { flex: 1; height: 0.5px; background: var(--border); }
+  .lb-divider-text { font-size: 11px; color: var(--color-text-secondary); font-weight: 500; }
+  .lb-footer { padding: 14px 16px 0; display: flex; gap: 8px; }
+  .lb-btn { flex: 1; padding: 14px; border-radius: var(--border-radius-md); font-size: 14px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; border: 1.5px solid var(--ink); text-align: center; }
+  .lb-btn-primary { background: var(--ink); color: var(--yellow); }
+  .lb-btn-secondary { background: transparent; color: var(--ink); }
+  .lb-you-tag { font-size: 10px; font-weight: 700; background: var(--ink); color: var(--yellow); padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; text-transform: uppercase; letter-spacing: 0.5px; }
+  .lb-streak { display: flex; align-items: center; gap: 4px; padding: 0 16px; margin-top: 10px; }
+  .lb-streak-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--yellow); }
+  .lb-streak-text { font-size: 12px; font-weight: 600; color: var(--color-text-secondary); }
+  .lb-streak-text span { color: var(--color-text-primary); font-weight: 800; }
+</style>
+
+<h2 class="sr-only">400m race leaderboard showing current standings, personal best, and race again options</h2>
+
+<div class="lb-wrap">
+  <div class="lb-header">
+    <div class="lb-header-top">
+      <button class="lb-back"><i class="ti ti-arrow-left" aria-hidden="true" style="font-size:14px"></i> Back</button>
+      <span class="lb-date">26 May 2026</span>
+    </div>
+    <div class="lb-title">THE 400M</div>
+    <div class="lb-subtitle">Global leaderboard · Updated live</div>
+    <div class="lb-tabs">
+      <div class="lb-tab active">This week</div>
+      <div class="lb-tab">All time</div>
+      <div class="lb-tab">Friends</div>
+    </div>
+  </div>
+
+  <div class="lb-pb-strip">
+    <div>
+      <div class="lb-pb-label">Your personal best</div>
+      <div class="lb-pb-value">38.2s</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+      <div class="lb-pb-badge">New PB!</div>
+      <div style="font-size:11px;color:#888;font-weight:500">↑ 1.4s faster than last week</div>
+    </div>
+  </div>
+
+  <div class="lb-list">
+    <div class="lb-row medal-1">
+      <div class="lb-medal">🥇</div>
+      <div class="lb-avatar lb-av-a" style="background:#FAC775;color:#633806">AT</div>
+      <div class="lb-info">
+        <div class="lb-name">Alex T.</div>
+        <div class="lb-meta">5/5 mini-games · 94 km/h top</div>
+      </div>
+      <div style="text-align:right">
+        <div class="lb-time">34.1s</div>
+        <div class="lb-time-label">2h ago</div>
+      </div>
+    </div>
+
+    <div class="lb-row">
+      <div class="lb-medal">🥈</div>
+      <div class="lb-avatar lb-av-a" style="background:#B5D4F4;color:#0C447C">JK</div>
+      <div class="lb-info">
+        <div class="lb-name">Jordan K.</div>
+        <div class="lb-meta">4/5 mini-games · 91 km/h top</div>
+      </div>
+      <div style="text-align:right">
+        <div class="lb-time">35.8s</div>
+        <div class="lb-time-label">Yesterday</div>
+      </div>
+    </div>
+
+    <div class="lb-row">
+      <div class="lb-medal">🥉</div>
+      <div class="lb-avatar lb-av-a" style="background:#C0DD97;color:#27500A">SR</div>
+      <div class="lb-info">
+        <div class="lb-name">Sam R.</div>
+        <div class="lb-meta">3/5 mini-games · 88 km/h top</div>
+      </div>
+      <div style="text-align:right">
+        <div class="lb-time">36.9s</div>
+        <div class="lb-time-label">5h ago</div>
+      </div>
+    </div>
+
+    <div class="lb-divider">
+      <div class="lb-divider-line"></div>
+      <div class="lb-divider-text">3 runners above you</div>
+      <div class="lb-divider-line"></div>
+    </div>
+
+    <div class="lb-row me">
+      <div class="lb-rank">4</div>
+      <div class="lb-avatar">YOU</div>
+      <div class="lb-info">
+        <div class="lb-name">You <span class="lb-you-tag">You</span></div>
+        <div class="lb-meta">3/5 mini-games · 87 km/h top</div>
+      </div>
+      <div style="text-align:right">
+        <div class="lb-time">38.2s</div>
+        <div class="lb-time-label">Just now</div>
+      </div>
+    </div>
+
+    <div class="lb-row">
+      <div class="lb-rank">5</div>
+      <div class="lb-avatar lb-av-a" style="background:#F4C0D1;color:#72243E">MH</div>
+      <div class="lb-info">
+        <div class="lb-name">Morgan H.</div>
+        <div class="lb-meta">2/5 mini-games · 85 km/h top</div>
+      </div>
+      <div style="text-align:right">
+        <div class="lb-time">39.1s</div>
+        <div class="lb-time-label">3h ago</div>
+      </div>
+    </div>
+
+    <div class="lb-row">
+      <div class="lb-rank">6</div>
+      <div class="lb-avatar lb-av-a" style="background:#D3D1C7;color:#444441">PL</div>
+      <div class="lb-info">
+        <div class="lb-name">Pat L.</div>
+        <div class="lb-meta">4/5 mini-games · 83 km/h top</div>
+      </div>
+      <div style="text-align:right">
+        <div class="lb-time">40.5s</div>
+        <div class="lb-time-label">Yesterday</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lb-streak">
+    <div class="lb-streak-dot"></div>
+    <div class="lb-streak-text"><span>2 day streak</span> · Race daily to protect it</div>
+  </div>
+
+  <div class="lb-footer">
+    <div class="lb-btn lb-btn-primary">Race again</div>
+    <div class="lb-btn lb-btn-secondary">Home</div>
+  </div>
+</div>

@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   label: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '800',
     color: '#888888',
     letterSpacing: 2,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   encouragingText: {
     color: COLORS.textMuted,
-    fontSize: 11,
+    fontSize: 13,
     fontStyle: 'italic',
     marginTop: 6,
     marginLeft: 4,

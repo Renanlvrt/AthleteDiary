@@ -61,11 +61,11 @@ const styles = StyleSheet.create({
   title: {
     ...TYPOGRAPHY.caption,
     color: COLORS.textPrimary,
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '900',
   },
   sub: {
-    fontSize: 11,
+    fontSize: 13,
     color: COLORS.textSecondary,
     marginTop: 4,
   },

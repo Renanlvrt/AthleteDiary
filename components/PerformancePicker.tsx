@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
   },
   label: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '800',
     letterSpacing: 3,
     textTransform: 'uppercase',
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.primary,
   },
   pillText: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '800',
     color: '#BBBBBB',
     letterSpacing: 1,

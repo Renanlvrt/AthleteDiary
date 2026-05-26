@@ -118,9 +118,9 @@ export default function LogScreen() {
         style={styles.flex}
       >
         <ScrollView 
-          style={styles.flex} 
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContent}
-          scrollEnabled={scrollEnabled}
+          scrollEnabled={false}
         >
           {/* ── 1. YELLOW HEADER BLOCK (Edge-to-Edge) ── */}
           <View style={[styles.yellowBlock, { paddingTop: insets.top + SPACING.md }]}>
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   todayLabel: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '800',
     letterSpacing: 3,
     textTransform: 'uppercase',
@@ -267,14 +267,14 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   sportPillText: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '800',
     color: COLORS.primary,
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
   sportPillChange: {
-    fontSize: 9,
+    fontSize: 11,
     color: '#666666',
     letterSpacing: 1,
   },
@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   saveButtonText: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '900',
     color: COLORS.accentRed,
     letterSpacing: 3,

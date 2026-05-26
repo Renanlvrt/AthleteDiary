@@ -128,7 +128,46 @@ export default function HomeScreen() {
           <MoodGrid sessions={sessions} />
         </View>
 
-        {/* ── 3. REFINED RECENT SESSIONS SECTION heading text white cards ── */}
+        {/* ── 3. PLAY MINI GAMES SECTION ── */}
+        <View style={styles.recentSection}>
+          <Text style={styles.recentHeading}>PLAY{"\n"}MINI GAMES</Text>
+
+          {/* SPRINT CARD */}
+          <Pressable
+            style={styles.raceCard}
+            onPress={() => {
+              void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              router.push({ pathname: '/race', params: { type: 'flat' } });
+            }}
+          >
+            <View>
+              <Text style={styles.raceCardTitle}>400M SPRINT</Text>
+              <Text style={styles.raceCardSub}>Flat Race · 30 sec</Text>
+            </View>
+            <View style={styles.raceCardBadge}>
+              <Text style={styles.raceCardBadgeText}>PLAY →</Text>
+            </View>
+          </Pressable>
+
+          {/* HURDLES CARD */}
+          <Pressable
+            style={[styles.raceCard, { marginTop: 8 }]}
+            onPress={() => {
+              void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              router.push({ pathname: '/race', params: { type: 'hurdles' } });
+            }}
+          >
+            <View>
+              <Text style={styles.raceCardTitle}>400M HURDLES</Text>
+              <Text style={styles.raceCardSub}>Jump Event · 35 sec</Text>
+            </View>
+            <View style={styles.raceCardBadge}>
+              <Text style={styles.raceCardBadgeText}>PLAY →</Text>
+            </View>
+          </Pressable>
+        </View>
+
+        {/* ── 4. REFINED RECENT SESSIONS SECTION ── */}
         <View style={styles.recentSection}>
           <Text style={styles.recentHeading}>RECENT{"\n"}SESSIONS</Text>
 
@@ -217,7 +256,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   heroSub: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '700',
     color: COLORS.textOnYellow,
     opacity: 0.6,
@@ -265,7 +304,7 @@ const styles = StyleSheet.create({
     marginHorizontal: SPACING.md,
   },
   emptyText: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '800',
     letterSpacing: 2,
     color: COLORS.textSecondary,
@@ -275,6 +314,44 @@ const styles = StyleSheet.create({
   scheduleWrapper: {
     marginTop: SPACING.md,
     marginHorizontal: SPACING.md,
+  },
+
+  // Race card
+  raceCard: {
+    backgroundColor: COLORS.black,
+    borderRadius: RADIUS.lg,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  raceCardTitle: {
+    color: COLORS.primary,
+    fontSize: 22,
+    fontWeight: '900',
+    letterSpacing: -1,
+    lineHeight: 24,
+  },
+  raceCardSub: {
+    color: '#888888',
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+    marginTop: 3,
+  },
+  raceCardBadge: {
+    backgroundColor: COLORS.primary,
+    borderRadius: RADIUS.md,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+  },
+  raceCardBadgeText: {
+    color: COLORS.black,
+    fontSize: 12,
+    fontWeight: '900',
+    letterSpacing: 1,
   },
 
   // Refined Integrated BOTTOM BAR button

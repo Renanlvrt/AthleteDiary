@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
   },
   pillText: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '800',
     color: COLORS.textSecondary,
     letterSpacing: 2,

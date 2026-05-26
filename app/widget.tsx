@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   screenLabel: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '800',
     letterSpacing: 3,
     color: COLORS.textOnYellow,
@@ -300,18 +300,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   urlLabel: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '800',
     letterSpacing: 2,
     color: '#AAAAAA',
   },
   urlText: {
-    fontSize: 11,
+    fontSize: 13,
     color: '#333333',
     lineHeight: 16,
   },
   urlEmptyText: {
-    fontSize: 11,
+    fontSize: 13,
     color: '#AAAAAA',
     fontStyle: 'italic',
   },
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
   },
   copyBtnText: {
     color: COLORS.primary,
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '800',
   },
 

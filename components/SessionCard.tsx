@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
   },
   meta: {
     ...TYPOGRAPHY.cardMeta,
-    fontSize: 11,
+    fontSize: 13,
     color: '#888888',
   },
   right: {
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   perfLabel: {
     ...TYPOGRAPHY.perfLabel,
     color: '#000000',
-    fontSize: 10,
+    fontSize: 12,
   },
 
   // Expanded panel
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   notesLabel: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '800',
     letterSpacing: 2,
     color: '#BBBBBB',
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   modifyText: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '900',
     color: COLORS.primary,
     letterSpacing: 1.5,
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   revertText: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '800',
     color: '#888888',
     letterSpacing: 1.5,
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F0',
   },
   cancelText: {
-    fontSize: 11,
+    fontSize: 13,
     color: '#666666',
     fontWeight: '600',
   },
@@ -424,7 +424,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   saveBtnText: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '900',
     color: COLORS.primary,
     letterSpacing: 1.5,

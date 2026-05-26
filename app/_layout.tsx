@@ -66,6 +66,10 @@ export default function RootLayout() {
         />
         <Stack.Screen name="schedule" />
         <Stack.Screen name="widget" />
+        <Stack.Screen
+          name="race"
+          options={{ headerShown: false, animation: 'slide_from_bottom' }}
+        />
       </Stack>
     </SafeAreaProvider>
   );

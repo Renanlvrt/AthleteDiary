@@ -244,14 +244,14 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   saveButtonText: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '900',
     color: '#000000',
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
   hint: {
-    fontSize: 11,
+    fontSize: 13,
     color: '#888888',
     textAlign: 'center',
     marginTop: SPACING.md,

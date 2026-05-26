@@ -14,6 +14,7 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
+import * as Linking from 'expo-linking';
 import { Platform } from 'react-native';
 import { STORAGE_KEYS } from './constants';
 import { Session, TrainingSchedule } from './types';
@@ -146,23 +147,15 @@ async function upsertBlob(payload: WidgetPayload): Promise<string | null> {
 
 /**
  * Returns the best URL to open the Log Session screen.
- *
- * When running inside Expo Go, Constants.expoGoConfig.debuggerHost
- * gives us the Metro server address (e.g. "192.168.1.42:8081").
- * We store  exp://IP:PORT/--/log  in the jsonblob payload so that
- * tapping the widget opens Expo Go directly at the log screen.
- *
- * This works on any WiFi where the laptop is also connected and
- * `npx expo start` is running.  No paid account or Mac required.
+ * Uses expo-linking to robustly generate the correct deep link
+ * whether running in local Expo Go, published Expo Go, or standalone.
  */
 function computeDeepLinkUrl(): string {
-  const debuggerHost = Constants.expoGoConfig?.debuggerHost;
-  if (debuggerHost) {
-    // e.g. "192.168.1.42:8081" → "exp://192.168.1.42:8081/--/log"
-    return `exp://${debuggerHost}/--/log`;
+  try {
+    return Linking.createURL('log');
+  } catch (e) {
+    return 'athletediary://log';
   }
-  // Fallback – standalone build (not currently used but kept for future)
-  return 'athletediary://log';
 }
 
 function dateString(d: Date): string {

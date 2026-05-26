@@ -168,7 +168,7 @@ export const TYPOGRAPHY = {
 
   // Muted date caption below hero text
   dateSub: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '600' as const,
     color: COLORS.textOnYellow,
     opacity: 0.4,
@@ -179,7 +179,7 @@ export const TYPOGRAPHY = {
 
   // Section labels (THIS YEAR, HOW DID YOU FEEL?)
   sectionLabel: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '800' as const,
     letterSpacing: 3,
     textTransform: 'uppercase' as const,
@@ -198,7 +198,7 @@ export const TYPOGRAPHY = {
 
   // Small caption (TODAY, DAY STREAK, sport labels)
   caption: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '700' as const,
     letterSpacing: 2,
     textTransform: 'uppercase' as const,
@@ -222,14 +222,14 @@ export const TYPOGRAPHY = {
 
   // Card meta (date, muted)
   cardMeta: {
-    fontSize: 10,
+    fontSize: 12,
     color: '#AAAAAA',
     marginTop: 1,
   },
 
   // Performance pill label
   perfLabel: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '800' as const,
     letterSpacing: 1,
     textTransform: 'uppercase' as const,

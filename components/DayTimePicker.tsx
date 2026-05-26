@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     minHeight: 56,
   },
   dayLabel: {
-    fontSize: 11,
+    fontSize: 13,
     fontWeight: '800',
     letterSpacing: 2,
     textTransform: 'uppercase',
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   offText: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '700',
     color: '#999999',   // Medium grey — visible on white
     letterSpacing: 2,

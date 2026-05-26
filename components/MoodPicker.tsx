@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   label: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '800',
     letterSpacing: 3,
     textTransform: 'uppercase',
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   endLabel: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '700',
     letterSpacing: 1,
     textTransform: 'uppercase',
