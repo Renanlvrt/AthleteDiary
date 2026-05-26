@@ -17,14 +17,14 @@ export function LongJump() {
   useFrame(() => {
     if (!groupRef.current) return;
     const { distance } = useGameStore.getState();
-    // Scroll towards the camera based on player distance
-    groupRef.current.position.z = distance;
+    // Start at -40, scroll to 0 as player runs to 40m
+    groupRef.current.position.z = distance - LONG_JUMP_BOARD;
   });
 
   if (raceType !== 'long_jump') return null;
 
   return (
-    <group ref={groupRef} position={[0, 0, -LONG_JUMP_BOARD]}>
+    <group ref={groupRef}>
       {/* ── Take-off Board (Foul Line) ── */}
       {/* Placed exactly at LONG_JUMP_BOARD */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.015, 0]}>

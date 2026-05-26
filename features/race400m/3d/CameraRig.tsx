@@ -23,7 +23,7 @@ export function CameraRig() {
   const curveAngle  = useRef(0);
 
   useFrame((_, delta) => {
-    const { speed, phase, distance } = useGameStore.getState();
+    const { speed, phase, distance, raceType } = useGameStore.getState();
 
     // ── FOV push on acceleration ────────────────────────────
     const targetFov = BASE_FOV + (speed / 100) * (MAX_FOV - BASE_FOV);
@@ -37,10 +37,11 @@ export function CameraRig() {
       shakeRef.current += delta * 18;
       const sx = Math.sin(shakeRef.current * 2.3) * SHAKE_INTENSITY;
       const sy = Math.cos(shakeRef.current * 1.7) * SHAKE_INTENSITY * 0.5;
-      camera.position.x = sx;
+      camera.position.x = (raceType === 'long_jump' ? 12 : 0) + sx;
       camera.position.y = 1.6 + sy;
     } else {
-      camera.position.x += (0 - camera.position.x) * 0.1;
+      const targetX = raceType === 'long_jump' ? 12 : 0;
+      camera.position.x += (targetX - camera.position.x) * 0.1;
       camera.position.y += (1.6 - camera.position.y) * 0.1;
       shakeRef.current = 0;
     }
@@ -52,8 +53,13 @@ export function CameraRig() {
     camera.rotation.z = curveAngle.current;
 
     // ── Ensure camera always points at runner ────────────────
-    camera.position.z = 4;
-    camera.lookAt(0, 1.0, 0);
+    if (raceType === 'long_jump') {
+      camera.position.z += (0 - camera.position.z) * 0.1; // Move to z=0 for perfect side view
+      camera.lookAt(0, 1.0, 0); // Look at player
+    } else {
+      camera.position.z = 4;
+      camera.lookAt(0, 1.0, 0);
+    }
   });
 
   return null;
